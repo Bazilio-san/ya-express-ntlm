@@ -1,4 +1,5 @@
 export { authNTLM } from './express-ntlm/auth-ntlm';
+export { NTLMAuthError } from './express-ntlm/lib/NTLMAuthError';
 
 export {
   TProxy,
