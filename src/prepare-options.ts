@@ -58,8 +58,8 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
     opt.getConnectionId = (rsn: IRsn): string => setProxyIdCookie(rsn.res, getId(rsn));
   }
 
-  if (typeof opt.getControllers !== 'function') {
-    opt.getControllers = () => ['ldap://alfa.com'];
+  if (typeof opt.getDomainControllers !== 'function') {
+    opt.getDomainControllers = () => ['ldap://alfa.com'];
   }
 
   if (typeof opt.getDomain !== 'function') {

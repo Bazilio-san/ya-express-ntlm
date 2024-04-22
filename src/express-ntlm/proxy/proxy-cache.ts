@@ -25,7 +25,7 @@ const cache: {
 const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Promise<IAddProxyResult> => {
   const strategy = rsn.options.getStrategy(rsn);
   const tlsOptions = rsn.options.getTlsOptions(rsn);
-  const controllers = rsn.options.getControllers(rsn);
+  const controllers = rsn.options.getDomainControllers(rsn);
 
   if (strategy === 'NTLM_STUB') {
     const proxy = new NTLMProxyStub(id);

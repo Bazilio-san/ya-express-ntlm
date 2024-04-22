@@ -38,7 +38,7 @@ const port = 8080;
 app.use(authNTLM({
   getStrategy: () => 'NTLM',
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
-  getControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
+  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
 }));
 
 app.all('*', (req, res) => {
@@ -71,7 +71,7 @@ const port = 8080;
 app.use(authNTLM({
   getStrategy: () => EAuthStrategy.NTLM,
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
-  getControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
+  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
 }));
 
 app.all('*', (req: Request, res: Response) => {
@@ -97,9 +97,11 @@ It's not recommended, but it's possible to add NTLM-Authentication without valid
 
 ## options
 
-https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/express-ntlm/types/interfaces.ts#L31
+All parameters are optional functions:  
+https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L42
 
-
+Default values are here:  
+https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L8
 
 
 
