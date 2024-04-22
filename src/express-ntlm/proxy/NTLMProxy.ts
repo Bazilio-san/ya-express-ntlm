@@ -20,7 +20,7 @@ export class NTLMProxy {
 
   private socket: TLSSocket | Socket | null;
 
-  private ldapContext = new LDAPContext(); // заглушка-инициализация
+  private ldapContext = new LDAPContext(); // stub initialization
 
   private readonly host: string;
 

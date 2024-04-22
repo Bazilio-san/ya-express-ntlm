@@ -1,23 +1,23 @@
 /* eslint-disable no-console */
 
-import * as dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
+const dotenv = require('dotenv');
+const express = require('express');
 
 dotenv.config();
 process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy';
 
-import { authNTLM, EAuthStrategy } from '../src';
+const { authNTLM } = require('../dist/cjs/src/index.js');
 
-const app: express.Express = express();
+const app = express();
 const port = 8080;
 
 app.use(authNTLM({
-  getStrategy: () => EAuthStrategy.NTLM,
+  getStrategy: () => 'NTLM',
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
   getControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
 }));
 
-app.all('*', (req: Request, res: Response) => {
+app.all('*', (req, res) => {
   res.end(JSON.stringify({ ts: Date.now(), ...req.ntlm }));
   // {"domain": "MYDOMAIN", "username": "MYUSER", "workstation": "MYWORKSTATION"}
 });

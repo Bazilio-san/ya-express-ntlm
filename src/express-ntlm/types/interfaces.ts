@@ -12,16 +12,16 @@ export interface Iudw {
 export type TProxy = NTLMProxy | NTLMProxyStub
 
 /**
- Стратегии:
+ Strategy
 
- NTLM - обычная 4-х шаговая аутентификация с запросами в LDAP.
- Возвращает имя пользователя и реальный признак авторизации в AD.
- Используется по умолчанию.
+ NTLM - regular 4-step authentication with LDAP queries.
+ Returns the username and real sign of authorization in AD.
+ Used by default.
 
- NTLM_STUB - 3-х шаговая аутентификация без запросов в LDAP.
- Второй шаг - искусственно сформированный ответ LDAP (NTLM message Type 2).
- В ответе от браузера ожидается имя пользователя и домен.
- 4-й шаг - проверка авторизации - заглушка, всегда возвращающая true.
+ NTLM_STUB - 3-step authentication without queries in LDAP.
+ The second step is an artificially generated LDAP response (NTLM message Type 2).
+ The response from the browser expects the username and domain.
+ 4th step - authorization check - a stub that always returns true.
  */
 export enum EAuthStrategy {
   NTLM = 'NTLM',

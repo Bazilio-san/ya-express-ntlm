@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Debug } from 'af-tools-ts';
-import { green, bold, reset, magenta, cyan, yellow } from 'af-color';
+import { green, bold, reset, magenta, cyan, yellow, red } from 'af-color';
 
 export const debug = Debug('ntlm:auth', {
   noTime: true,
@@ -17,5 +17,12 @@ export const debugProxy = Debug('ntlm:ldap-proxy', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + yellow,
+  messageColor: reset,
+});
+
+export const debugContext = Debug('ntlm:context', {
+  noTime: true,
+  noPrefix: false,
+  prefixColor: bold + red,
   messageColor: reset,
 });

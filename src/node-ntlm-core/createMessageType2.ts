@@ -81,7 +81,7 @@ export const createMessageType2 = (messageType1: Buffer): Buffer => {
   if (ntlmVersion === 2) {
     // Target info data
     // offset = challenge.writeUInt16LE(0x0200, offset); // Domain
-    offset = messageType2.writeUInt16LE(0x0002, offset); // Domain // VVA в последней версии автора !!!
+    offset = messageType2.writeUInt16LE(0x0002, offset); // Domain // VVA in the latest version of the author!!!
     offset = messageType2.writeUInt16LE(targetName.length * 2, offset);
     offset += messageType2.write(targetName, offset, 'ucs2');
     offset = messageType2.writeUInt16LE(0x0000, offset); // Terminator block

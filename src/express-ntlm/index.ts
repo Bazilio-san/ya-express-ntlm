@@ -1,3 +1,3 @@
-export { ntlm } from './auth-ntlm';
+export { authNTLM } from './auth-ntlm';
 
 export * from './types/interfaces';

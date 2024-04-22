@@ -11,8 +11,8 @@ import { arrowR, Larrow } from './lib/constants';
 import { setDomainCookie } from './lib/utils';
 
 /**
- * Возвращает данные из заголовка Authorization: NTLM <data>
- * Если их удается распарсить, то заполняется req.ntlm
+ * Returns data from the Authorization header: NTLM <data>
+ * If they can be parsed, then req.ntlm is filled
  */
 const getNtlmAuthorizationData = (req: Request): string | undefined => {
   const [title, data] = req.headers?.authorization?.split(' ') || [];
@@ -22,8 +22,8 @@ const getNtlmAuthorizationData = (req: Request): string | undefined => {
 };
 
 /**
- * Заполняет req.ntlm данными из заголовка Authorization: NTLM <data>
- * Если их удастся распарсить.
+ * Fills req.ntlm with data from the Authorization header: NTLM <data>
+ * If they can be parsed.
  */
 const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
   const parsedData = ntlmParse(data, { compact: true }) as NTLMType1 | NTLMType2 | NTLMType3;
@@ -36,7 +36,7 @@ const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
   return parsedData;
 };
 
-export const ntlm = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
+export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
   const options = prepareOptions(authNtlmOptions);
   return async (req: Request, res: Response, next: NextFunction) => {
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
@@ -51,7 +51,7 @@ export const ntlm = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
 
     const mTitle = `============ Start NTLM Authorization. Strategy: ${options.getStrategy(rsn)} ==================`;
 
-    // req.ntlm.isAuthenticated должно заполняться ранее, при определении наличия сессионного cookie
+    // req.ntlm.isAuthenticated must be filled in earlier when determining the presence of a session cookie
     if (ntlm.isAuthenticated) {
       if (!authorizationHeader || (authorizationHeader && req.method !== 'POST')) {
         debug(`${requestedURI}\nConnection already authenticated${
@@ -68,15 +68,15 @@ export const ntlm = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
       return res.setHeader('WWW-Authenticate', 'NTLM').status(401).end();
     }
 
-    // Возвращает данные из заголовка Authorization: NTLM <data>
+    // Returns data from the Authorization header: NTLM <data>
     const ntlmAuthData = getNtlmAuthorizationData(req);
 
     if (!ntlmAuthData) {
       return options.handleHttpError400(res, `Authorization header does not contain NTLM data. URI ${uri}`);
     }
-    // Заполняет req.ntlm данными из из заголовка Authorization: NTLM <data>.
+    // Fills req.ntlm with data from the Authorization header: NTLM <data>.
     const { domain, messageType } = fillReqNtlm(req, ntlmAuthData);
-    // Имени домена из сообщений - верим
+    // Domain names from NTLM messages - we believe
     if (domain) {
       setDomainCookie(rsn, domain);
     }
@@ -92,14 +92,14 @@ export const ntlm = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
 
     if (messageType === NTLMMessageType.AUTHENTICATE_MESSAGE) {
       if (!await handleAuthenticate(rsn, dataBuf)) {
-        return; // В этом случе ошибку уже отправлена по HTTP
+        return; // In this case the error has already been sent over HTTP
       }
-      if (!req.ntlm.isAuthenticated) {
-        return options.handleHttpError403(res, req.ntlm as Iudw);
+      if (!ntlm.isAuthenticated) {
+        return options.handleHttpError403(res, ntlm as Iudw);
       }
       if (debug.enabled) {
         // eslint-disable-next-line no-console
-        console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, req.ntlm, `\n`);
+        console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, ntlm, `\n`);
       }
       return next();
     }

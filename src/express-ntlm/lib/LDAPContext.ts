@@ -1,17 +1,10 @@
 // noinspection ExceptionCaughtLocallyJS
 
-import { Debug } from 'af-tools-ts';
-import { lBlue, g, bold, reset, red } from 'af-color';
+import { lBlue, g } from 'af-color';
 import { Buffer } from 'buffer';
 import * as ASN1 from './ASN1';
 import { concatBuffer } from './utils';
-
-const debug = Debug('ntlm:context', {
-  noTime: true,
-  noPrefix: false,
-  prefixColor: bold + red,
-  messageColor: reset,
-});
+import { debugContext } from '../debug';
 
 const LDAP_RESULT_CODE = {
   SUCCESS: 0,
@@ -43,12 +36,12 @@ export class LDAPContext {
     const [resultCode, data4] = ASN1.parseENUM2(data3);
 
     if (resultCode === LDAP_RESULT_CODE.SUCCESS) {
-      debug(`${pfx}resultCode: SUCCESS`);
+      debugContext(`${pfx}resultCode: SUCCESS`);
       return { isOk: true };
     }
 
     if (resultCode !== LDAP_RESULT_CODE.SASL_BIND_IN_PROGRESS) {
-      debug(`${pfx}resultCode: SASL_BIND_IN_PROGRESS`);
+      debugContext(`${pfx}resultCode: SASL_BIND_IN_PROGRESS`);
       return { isOk: false };
     }
 
@@ -58,7 +51,7 @@ export class LDAPContext {
 
     const serverSaslCreds: Buffer = ASN1.parseTLV(0x87, data6);
 
-    debug(`${pfx}serverSaslCreds: ${serverSaslCreds.toString('utf8')}`);
+    debugContext(`${pfx}serverSaslCreds: ${serverSaslCreds.toString('utf8')}`);
 
     return { isOk: true, serverSaslCreds };
   }
