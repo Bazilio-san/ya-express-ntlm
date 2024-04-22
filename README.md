@@ -117,7 +117,7 @@ Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/ma
 To enable debug mode, you need to set ENV DEBUG=ntlm:auth,ntlm:ldap-proxy
 
 ```shell
-DEBUG=ntlm:auth,ntlm:ldap-proxy npm run test-server
+DEBUG=ntlm:auth,ntlm:ldap-proxy npm run test-server,ntlm:conn-id
 ```
 
 
