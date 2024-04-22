@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test-web-server (NTLM_STUB)" type="NodeJSConfigurationType" path-to-js-file="__tests__/test-web-server-NTLM_STUB.js" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

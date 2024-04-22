@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="test-web-server (TS)" type="NodeJSConfigurationType" path-to-js-file="dist/cjs/__tests__/test-web-server.js" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>
