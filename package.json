@@ -5,15 +5,15 @@
   "productName": "ya-express-ntlm",
   "author": "Viacheslav Makarov <vvmakarov@corp.finam.ru>",
   "private": true,
-  "main": "./dist/api/start.js",
+  "main": "./dist/src/start.js",
   "scripts": {
-    "start": "node ./dist/api/start.js",
+    "start": "node ./dist/src/start.js",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue,.json ./",
     "clean": "shx rm -rf ./dist/*",
     "build": "tsc -b ./tsconfig.json",
     "cb": "npm run clean && npm run build",
-    "krb": "node ./dist/api/kerberos.js"
+    "krb": "node ./dist/src/kerberos.js"
   },
   "dependencies": {
     "af-color": "^0.0.8",

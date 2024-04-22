@@ -9,7 +9,6 @@ module.exports = {
   env: {
     jest: true,
   },
-  // Rules order is important, please avoid shuffling them
   extends: [
     'eslint-config-af-24',
   ],

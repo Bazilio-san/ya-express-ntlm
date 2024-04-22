@@ -14,10 +14,6 @@ babel.config.js
 _logs
 **/_misc
 _tmp
-build
 coverage
-/dist
 /node_modules
-pub
-_sql
 1.js

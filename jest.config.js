@@ -32,8 +32,8 @@ module.exports = {
     '/systemd-service/',
   ],
   // globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
-  // testSequencer: '<rootDir>/api/__tests__/test-sequencer.js',
-  // globalSetup: '<rootDir>/api/__tests__/global-setup.ts',
-  // globalTeardown: '<rootDir>/api/__tests__/global-teardown.ts',
+  // testSequencer: '<rootDir>/src/__tests__/test-sequencer.js',
+  // globalSetup: '<rootDir>/src/__tests__/global-setup.ts',
+  // globalTeardown: '<rootDir>/src/__tests__/global-teardown.ts',
   testTimeout: 100_000,
 };

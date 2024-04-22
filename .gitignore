@@ -6,7 +6,6 @@ node_modules
 # Quasar core related directories
 .quasar
 /dist
-/dist
 /build/
 
 # Cordova related directories and files
@@ -51,13 +50,13 @@ yarn-error.log*
 /.env.pm2
 /.env
 /config/__servers__/
-/api/jira/export.*
+/src/jira/export.*
 /1.js
 /2.js
 ~$*.*
-/api/jira/sync/issues/issues.xlsx
-/api/_ones/cosine-sim-matrix/exports/
-/api/_ones/alex-tele/
+/src/jira/sync/issues/issues.xlsx
+/src/_ones/cosine-sim-matrix/exports/
+/src/_ones/alex-tele/
 *.rar
 *.keytab
-/api/auth-ntlm/
+/src/auth-ntlm/

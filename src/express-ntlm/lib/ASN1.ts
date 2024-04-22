@@ -49,7 +49,7 @@ export const makeINT = (num: number, tag?: number): Buffer => {
       const buf: Buffer = Buffer.alloc(1);
       buf.writeUInt8(num & 255, 0);
       // @ts-ignore
-      payload = buf + payload; // VVA
+      payload = buf + payload;
       num >>>= 8;
     }
   }
