@@ -6,16 +6,16 @@ export {
   NTLMFlag,
   createDesEncrypt,
   NTLMTypeFlags,
-} from './lib/core';
+} from './core';
 
 export {
   createMessageType1,
   Type1MessageOptions,
-} from './lib/createMessageType1';
+} from './createMessageType1';
 
 export {
   createMessageType3,
   Type3MessageOptions,
-} from './lib/createMessageType3';
+} from './createMessageType3';
 
-export { parseMessageType2 } from './lib/parseMessageType2';
+export { parseMessageType2 } from './parseMessageType2';

@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { NTLMFlag, NTLMTypeFlags } from './core';
-import { getSecBuf, getSecBufData } from '../../ntlm-parser/parser-utils';
+import { getSecBuf, getSecBufData } from '../ntlm-parser/parser-utils';
 
 export interface Type1MessageOptions {
   readonly domain: string;
