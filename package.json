@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -11,7 +11,7 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "lint:fix": "eslint --fix --ext .js,.ts,.vue,.json ./",
     "clean": "shx rm -rf ./dist/*",
-    "build": "tsc -b ./tsconfig.json",
+    "build": "tsc -b tsconfig.json tsconfig.esm.json tsconfig.types.json",
     "cb": "npm run clean && npm run build",
     "prepare": "husky",
     "test-server": "node ./__tests__/test-web-server-js.js"
