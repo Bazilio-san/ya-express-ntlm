@@ -1,0 +1,63 @@
+.DS_Store
+.thumbs.db
+node_modules
+!.gitkeep
+
+# Quasar core related directories
+.quasar
+/dist
+/dist
+/build/
+
+# Cordova related directories and files
+/src-cordova/node_modules
+/src-cordova/platforms
+/src-cordova/plugins
+/src-cordova/www
+
+# Capacitor related directories and files
+/src-capacitor/www
+/src-capacitor/node_modules
+
+# BEX related directories and files
+/src-bex/www
+/src-bex/js/core
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+
+# DEV directories
+/__misc/
+/_tmp/
+
+
+# Файлы, формируемые realtime
+/_files/
+/_logs/
+/_cache/
+/deploy/config.yml
+
+# Частные исключения
+/config/local.*
+/config/local-*.*
+/t.*
+*.local.*
+*.private.*
+/.env.pm2
+/.env
+/config/__servers__/
+/api/jira/export.*
+/1.js
+/2.js
+~$*.*
+/api/jira/sync/issues/issues.xlsx
+/api/_ones/cosine-sim-matrix/exports/
+/api/_ones/alex-tele/
+*.rar
+*.keytab
+/api/auth-ntlm/
