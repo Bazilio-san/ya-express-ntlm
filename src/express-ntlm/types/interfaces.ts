@@ -22,15 +22,10 @@ export type TProxy = NTLMProxy | NTLMProxyStub
  Второй шаг - искусственно сформированный ответ LDAP (NTLM message Type 2).
  В ответе от браузера ожидается имя пользователя и домен.
  4-й шаг - проверка авторизации - заглушка, всегда возвращающая true.
-
- NTLM_STUB_SHORT - 2-гшаговая заглушка. Только отправка браузеру искусственно
- сформированного NTLM message Type 2.
- В ответе от браузера ожидается имя пользователя и домен.
  */
 export enum EAuthStrategy {
   NTLM = 'NTLM',
   NTLM_STUB = 'NTLM_STUB',
-  NTLM_STUB_SHORT = 'NTLM_STUB_SHORT',
 }
 
 export interface IAuthNtlmOptionsMandatory {

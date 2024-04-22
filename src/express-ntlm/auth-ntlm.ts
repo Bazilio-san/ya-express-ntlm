@@ -36,7 +36,7 @@ const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
   return parsedData;
 };
 
-export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
+export const getNtlmAuthMiddleware = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
   const options = prepareOptions(authNtlmOptions);
   return async (req: Request, res: Response, next: NextFunction) => {
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;

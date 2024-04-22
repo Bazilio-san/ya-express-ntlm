@@ -1,21 +1,19 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compileOnSave": true,
-  "baseUrl": "./",
   "compilerOptions": {
     "skipLibCheck": true,
     "lib": [
       "es2019",
       "esnext.bigint",
       "es2020.string",
-      "es2020.symbol.wellknown",
-      "dom"
+      "es2020.symbol.wellknown"
     ],
-    "target": "es2019",
+    "target": "es2020",
     "module": "commonjs",
     "types": [
       "node",
-      "jest",
+      "jest"
     ],
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -25,30 +23,28 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "allowJs": true,
     "resolveJsonModule": true,
+    "allowJs": true,
     "noImplicitAny": false,
-    "outDir": "dist",
+    "outDir": "dist/cjs",
     "rootDir": "./",
     "ignoreDeprecations": "5.0"
   },
   "include": [
-    "./src/**/*.ts",
-    "./src/**/*.js"
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
   "exclude": [
     "dist",
     "**/dist",
-    "./.git",
-    "./.idea",
-    "./.run",
-    "./_logs",
+    ".git",
+    ".idea",
+    ".run",
+    "_logs",
     "**/_tmp",
-    "./coverage",
+    "coverage",
     "./config",
-    "./node_modules",
-    "./pub",
-    "./sql",
+    "node_modules",
     "**/dist",
     "**/_misc"
   ]
