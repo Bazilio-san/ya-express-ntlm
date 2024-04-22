@@ -1,3 +1,3 @@
-export { getNtlmAuthMiddleware } from './auth-ntlm';
+export { ntlm } from './auth-ntlm';
 
 export * from './types/interfaces';
