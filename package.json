@@ -12,7 +12,8 @@
     "lint:fix": "eslint --fix --ext .js,.ts,.vue,.json ./",
     "clean": "shx rm -rf ./dist/*",
     "build": "tsc -b ./tsconfig.json",
-    "cb": "npm run clean && npm run build"
+    "cb": "npm run clean && npm run build",
+    "prepare": "husky"
   },
   "dependencies": {
     "af-color": "^0.0.8",
@@ -23,12 +24,17 @@
     "js-md4": "^0.3.2"
   },
   "devDependencies": {
+    "@jest/test-sequencer": "^29.7.0",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
+    "@types/supertest": "^6.0.2",
     "eslint-config-af-24": "^2.4.2",
+    "husky": "^9.0.11",
     "jest": "^29.7.0",
     "shx": "^0.3.4",
     "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "np": {
