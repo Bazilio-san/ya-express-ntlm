@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ConnectionOptions } from 'node:tls';
-import { NTLMProxy } from '../proxy/NTLMProxy';
-import { NTLMProxyStub } from '../proxy/NTLMProxyStub';
+import { NTLMProxy } from './express-ntlm/proxy/NTLMProxy';
+import { NTLMProxyStub } from './express-ntlm/proxy/NTLMProxyStub';
 
 export interface Iudw {
   username: string,

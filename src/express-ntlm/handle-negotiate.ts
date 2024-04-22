@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { blue, reset } from 'af-color';
-import { IRsn } from './types/interfaces';
+import { IRsn } from '../interfaces';
 import { proxyCache } from './proxy/proxy-cache';
 import { debug, hnColor, hvOutColor } from './debug';
 import { ntlmParse } from '../ntlm-parser';

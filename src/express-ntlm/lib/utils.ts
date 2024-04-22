@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { CookieOptions, Request, Response } from 'express';
-import { IRsn } from '../types/interfaces';
+import { IRsn } from '../../interfaces';
 
 export const concatBuffer = (...args: Buffer[]): Buffer => {
   const buffersArray = Array.prototype.slice.call(args, 0);

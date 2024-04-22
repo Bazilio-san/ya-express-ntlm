@@ -1,9 +1,9 @@
 import { Response } from 'express';
 import { red, reset, yellow } from 'af-color';
-import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, Iudw } from './types/interfaces';
-import { debug } from './debug';
-import { getProxyIdCookie, setProxyIdCookie, UUIDv4 } from './lib/utils';
-import { getSuppliedDomainData } from '../node-ntlm-core/createMessageType1';
+import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, Iudw } from './interfaces';
+import { debug } from './express-ntlm/debug';
+import { getProxyIdCookie, setProxyIdCookie, UUIDv4 } from './express-ntlm/lib/utils';
+import { getSuppliedDomainData } from './node-ntlm-core/createMessageType1';
 
 export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   opt = opt || {};

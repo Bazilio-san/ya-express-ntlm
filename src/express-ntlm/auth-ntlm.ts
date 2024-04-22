@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { bg, black, blue, reset, rs } from 'af-color';
 import { Buffer } from 'buffer';
-import { IAuthNtlmOptions, IRsn, Iudw } from './types/interfaces';
+import { IAuthNtlmOptions, IRsn, Iudw } from '../interfaces';
 import { handleAuthenticate } from './handle-authenticate';
 import { handleNegotiate } from './handle-negotiate';
 import { debug, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
-import { prepareOptions } from './prepare-options';
+import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
 import { setDomainCookie } from './lib/utils';
 

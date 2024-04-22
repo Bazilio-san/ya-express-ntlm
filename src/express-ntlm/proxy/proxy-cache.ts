@@ -1,6 +1,6 @@
 import { blue, lBlue, reset, rs, yellow } from 'af-color';
 import { Buffer } from 'buffer';
-import { IRsn, TProxy } from '../types/interfaces';
+import { IRsn, TProxy } from '../../interfaces';
 import { debug, debugProxy } from '../debug';
 import { NTLMProxyStub } from './NTLMProxyStub';
 import { NTLMProxy } from './NTLMProxy';

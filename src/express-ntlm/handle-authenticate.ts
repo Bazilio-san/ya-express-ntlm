@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { bg, bold, boldOff, lBlue, reset, yellow } from 'af-color';
-import { EAuthStrategy, IRsn, Iudw } from './types/interfaces';
+import { EAuthStrategy, IRsn, Iudw } from '../interfaces';
 import { getDomainCookie, isFlagSet, toBinary } from './lib/utils';
 import { proxyCache } from './proxy/proxy-cache';
 import { debug } from './debug';
