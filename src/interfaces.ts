@@ -7,6 +7,7 @@ export interface Iudw {
   username: string,
   domain: string,
   workstation: string
+  isAuthenticated?: boolean,
 }
 
 export type TProxy = NTLMProxy | NTLMProxyStub
