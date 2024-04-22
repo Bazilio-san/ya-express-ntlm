@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { bg, black, blue, reset, rs } from 'af-color';
+import { bg, black, blue, bold, boldOff, reset, rs } from 'af-color';
 import { Buffer } from 'buffer';
 import { IAuthNtlmOptions, IRsn, Iudw } from '../interfaces';
 import { handleAuthenticate } from './handle-authenticate';
@@ -42,14 +42,15 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const requestedURI = `${arrowR} ${req.method}: ${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const authorizationHeader = req.headers.authorization;
-    const uriA = `${requestedURI} / ${authorizationHeader ? `${hnColor}Authorization: ${hvInColor}${authorizationHeader || ''}` : `${hnColor}NO Authorization header`}`;
+    const uriA = `${requestedURI} : ${authorizationHeader ? `${hnColor}Authorization: ${hvInColor}${
+      authorizationHeader || ''}` : `${hnColor}No Authorization header`}`;
     const rsn: IRsn = { req, res, next, options };
 
     req.ntlm = req.ntlm || { uri };
     res.locals.ntlm = req.ntlm;
     const { ntlm } = req;
 
-    const mTitle = `============ Start NTLM Authorization. Strategy: ${options.getStrategy(rsn)} ==================`;
+    const mTitle = `============ Start NTLM Authorization. Strategy: '${options.getStrategy(rsn)}' ==================`;
 
     // req.ntlm.isAuthenticated must be filled in earlier when determining the presence of a session cookie
     if (ntlm.isAuthenticated) {
@@ -64,7 +65,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     debug(uriA);
     if (!authorizationHeader) {
       debug(mTitle);
-      debug(`${Larrow} No Authorization header. Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
+      debug(`${Larrow} Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
       return res.setHeader('WWW-Authenticate', 'NTLM').status(401).end();
     }
 
@@ -101,6 +102,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
         // eslint-disable-next-line no-console
         console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, ntlm, `\n`);
       }
+      debug(`${Larrow} Return ${bold + black}next${blue}()${boldOff}`);
       return next();
     }
 

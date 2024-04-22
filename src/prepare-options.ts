@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { red, reset, yellow } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, Iudw } from './interfaces';
-import { debug } from './express-ntlm/debug';
+import { debug, debugConnId } from './express-ntlm/debug';
 import { getProxyIdCookie, setProxyIdCookie, UUIDv4 } from './express-ntlm/lib/utils';
 import { getSuppliedDomainData } from './node-ntlm-core/createMessageType1';
 
@@ -19,39 +19,41 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
   if (typeof opt.getConnectionId !== 'function') {
     const getId = (rsn: IRsn) => {
       const { req, options } = rsn;
-      let id;
+      let id: string | undefined;
+      const debugFrom = (from: string) => debugConnId(`from '${from}': ${yellow}${id}`);
       // 1) messageType1
       const messageType1 = rsn.payload as Buffer;
       if (messageType1) {
         id = getSuppliedDomainData(messageType1);
         if (id) {
           req.ntlm.domain = id;
-          debug(`[getConnectionId]: id from 'messageType1': ${yellow}${id}`);
+          debugFrom('messageType1');
           return id;
         }
-        debug(`${yellow}No domain extracted from NTLM message Type 1 (used ad id for Proxy Cache) ${reset}(for ${req.ntlm.uri})`);
+        debugConnId(`${yellow}No domain extracted from NTLM message Type 1 (used ad id for Proxy Cache) ${reset}(for ${req.ntlm.uri})`);
       }
       // 2) Cookie
       id = getProxyIdCookie(req);
       if (id) {
-        debug(`[getConnectionId]: id from 'Cookie': ${yellow}${id}`);
+        debugFrom('Cookie');
         return id;
       }
       // 3) ntlm.domain
-      if (req.ntlm.domain) {
-        debug(`[getConnectionId]: id from 'req.ntlm.domain': ${yellow}${id}`);
-        return req.ntlm.domain;
+      id = req.ntlm.domain;
+      if (id) {
+        debugFrom('req.ntlm.domain');
+        return id;
       }
       // 4) getDomain By Host
       id = options.getDomain(rsn);
       if (id) {
-        debug(`[getConnectionId]: id from 'getDomain()': ${yellow}${id}`);
+        debugFrom('getDomain()');
         req.ntlm.domain = id;
         return id;
       }
       // 5) UUIDv4
       id = UUIDv4();
-      debug(`[getConnectionId]: id from 'UUIDv4()': ${yellow}${id}`);
+      debugFrom('UUIDv4()');
       return id;
     };
 
