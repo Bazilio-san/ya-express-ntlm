@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Форма отправки</title>
+</head>
+<body>
+<form action="https://support-dev.finam.ru/plugins/servlet/desk/portal/2/create/15" method="POST">
+  <!-- Поле для ввода услуги -->
+  <label for="service">Услуга:</label>
+  <input type="text" id="service" name="service" required value="SRV-103"><br><br>
+
+  <label for="subservice">Вид запроса:</label>
+  <input type="text" id="subservice" name="subservice" value="SRV-112"><br><br>
+
+  customfield_10460:да
+
+  <!-- Поле для краткой темы -->
+  <label for="summary">Тема:</label>
+  <textarea id="summary" name="summary">Тестирование Темы</textarea><br><br>
+
+  <!-- Поле для описания -->
+  <label for="description">Описание:</label>
+  <textarea id="description" name="description">Тестирование c пробелами Описания</textarea><br><br>
+
+  <label for="customfield_10823">Название ПК:</label>
+  <input type="text" id="customfield_10823" name="customfield_10823" value="IT-155905"><br><br>
+
+  <label for="customfield_10456">Тип доступа:</label>
+  <select id="customfield_10456" name="customfield_10456">
+    <option value="Не выбрано">Временный</option>
+    <option value="Постоянный" selected>Постоянный</option>
+    <option value="Временный">Временный</option>
+  </select><br><br>
+
+  <label for="customfield_10453">Учётная запись:</label>
+  <input type="text" id="customfield_10453" name="customfield_10453" value="testValue1"><br><br>
+
+  <label for="customfield_10457">Обоснование необходимости:</label>
+  <textarea id="customfield_10457" name="customfield_10457">testValue2</textarea><br><br>
+
+  <label for="customfield_10460">Подтверждение:</label>
+  <select id="customfield_10460" name="customfield_10460" required>
+    <option value="да">Да</option>
+    <option value="нет">Нет</option>
+  </select><br><br>
+
+  <!-- Кнопка для отправки формы -->
+  <button type="submit">Отправить</button>
+</form>
+</body>
+</html>
