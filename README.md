@@ -89,19 +89,26 @@ console.log(`Server listening on http://localhost:${port}`);
 
 ### without validation
 
-It's not recommended, but it's possible to add NTLM-Authentication without validation. This means you can authenticate without providing valid credentials.
+It's not recommended, but it's possible to add NTLM-Authentication without 
+validation. This means you can authenticate without providing valid credentials.
 
-    app.use(ntlm());
+```js
+app.use(authNTLM({
+  getStrategy: () => 'NTLM_STUB',
+  getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
+  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
+}));
+```
 
 
 
 ## options
 
-All parameters are optional functions:  
-https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L39
+All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L39)     
 
-Default values are here:  
-https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L8
+
+Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L8).
+
 
 
 
@@ -137,7 +144,7 @@ NTLM Authentication Scheme for HTTP:
 https://web.archive.org/web/20200724074947/https://www.innovation.ch/personal/ronald/ntlm.html
 
 
-**NTLM-Authorisation**
 
+**Typical NTLM handshake looks like this**
 
-![NTLM-Authorisation.png](NTLM-Authorisation.png)
+<img src="NTLM-Authorisation.png" alt="NTLM-Authorisation.png" style="zoom: 67%;" />
