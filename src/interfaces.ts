@@ -71,6 +71,11 @@ export interface IAuthNtlmOptionsMandatory {
   handleHttpError500: (res: Response, message?: any) => void,
 
   /**
+   * Function to handle Success Authorisation.
+   */
+  handleSuccessAuthorisation: (rsn: IRsn) => void,
+
+  /**
    * Function to generate custom connection IDs, based optionally on the request
    * and response objects.
    */

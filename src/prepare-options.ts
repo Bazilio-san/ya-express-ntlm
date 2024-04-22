@@ -92,5 +92,11 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
     };
   }
 
+  if (typeof opt.handleSuccessAuthorisation !== 'function') {
+    opt.handleSuccessAuthorisation = (rsn: IRsn) => {
+      rsn.next();
+    };
+  }
+
   return opt as IAuthNtlmOptionsMandatory;
 };

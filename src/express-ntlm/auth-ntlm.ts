@@ -102,8 +102,9 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
         // eslint-disable-next-line no-console
         console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, ntlm, `\n`);
       }
-      debug(`${Larrow} Return ${bold + black}next${blue}()${boldOff}`);
-      return next();
+      options.handleSuccessAuthorisation(rsn);
+      debug(`${Larrow} handle success authorisation (Default ${bold + reset}next${blue}()${boldOff}${reset})`);
+      return;
     }
 
     return options.handleHttpError400(res, 'NTLM: Unexpected Type 2 message (CHALLENGE) in client request');
