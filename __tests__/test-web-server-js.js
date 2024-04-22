@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy';
+process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
 
 const { authNTLM } = require('../dist/cjs/src/index.js');
 

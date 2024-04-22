@@ -28,7 +28,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy';
+process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
 
 const { authNTLM } = require('../dist/cjs/src/index.js');
 
@@ -61,7 +61,7 @@ import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy';
+process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
 
 import { authNTLM, EAuthStrategy } from '../src';
 
@@ -98,7 +98,7 @@ It's not recommended, but it's possible to add NTLM-Authentication without valid
 ## options
 
 All parameters are optional functions:  
-https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L42
+https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L39
 
 Default values are here:  
 https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L8
