@@ -1,6 +1,5 @@
 import { Buffer } from 'buffer';
-import { CookieOptions } from 'express-serve-static-core';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import { IRsn } from '../types/interfaces';
 
 export const concatBuffer = (...args: Buffer[]): Buffer => {

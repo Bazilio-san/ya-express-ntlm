@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { bg, black, blue, reset, rs } from 'af-color';
 import { Buffer } from 'buffer';
 import { IAuthNtlmOptions, IRsn, Iudw } from './types/interfaces';

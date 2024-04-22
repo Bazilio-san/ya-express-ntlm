@@ -1,5 +1,3 @@
-// noinspection DuplicatedCode
-
 import { DES, Des } from 'des.js';
 import { create as createMd4 } from 'js-md4';
 

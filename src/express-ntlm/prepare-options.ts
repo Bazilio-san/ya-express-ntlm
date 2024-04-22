@@ -3,7 +3,7 @@ import { red, reset, yellow } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, Iudw } from './types/interfaces';
 import { debug } from './debug';
 import { getProxyIdCookie, setProxyIdCookie, UUIDv4 } from './lib/utils';
-import { getSuppliedDomainData } from '../@node-ntlm-core/lib/createMessageType1';
+import { getSuppliedDomainData } from '../node-ntlm-core/lib/createMessageType1';
 
 export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   opt = opt || {};

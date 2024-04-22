@@ -1,4 +1,4 @@
-declare module 'src/@node-ntlm-core/des.js.js' {
+declare module 'des.js' {
 
   interface Des {
     update (message: string | Buffer): number[];

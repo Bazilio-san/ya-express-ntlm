@@ -5,7 +5,7 @@ import { Debug } from 'af-tools-ts';
 import { bold, lBlue, reset, yellow } from 'af-color';
 import { sanitizeText } from '../lib/utils';
 import { LarrowR } from '../lib/constants';
-import { createMessageType2 } from '../../@node-ntlm-core/lib/createMessageType2';
+import { createMessageType2 } from '../../node-ntlm-core/lib/createMessageType2';
 
 const debug = Debug('ntlm:ldap-proxy', {
   noTime: true,
