@@ -12,6 +12,10 @@ export const handleNegotiate = async (rsn: IRsn, messageType1: Buffer) => {
     rsn.payload = messageType1;
     const proxyId = options.getProxyId(rsn);
     const messageType2 = await proxyCache.addOrReplace(rsn, proxyId, messageType1);
+    // const parsedData = ntlmParse(messageType2, { compact: true });
+    // if (parsedData.domain) { VVR
+    //   options.setProxyId(parsedData.domain, rsn);
+    // }
     res.setHeader('WWW-Authenticate', `NTLM ${messageType2}`).status(401).end();
     if (debug.enabled) {
       debug(`${Larrow} Return ${blue}401${reset} ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM ${messageType2}`);

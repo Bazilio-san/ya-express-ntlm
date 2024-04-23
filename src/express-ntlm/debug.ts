@@ -27,13 +27,6 @@ export const debugProxyId = Debug('ntlm:proxy-id', {
   messageColor: reset,
 });
 
-export const debugConnId = Debug('ntlm:conn-id', {
-  noTime: true,
-  noPrefix: false,
-  prefixColor: bold + magenta,
-  messageColor: reset,
-});
-
 export const debugContext = Debug('ntlm:context', {
   noTime: true,
   noPrefix: false,

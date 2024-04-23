@@ -1,25 +1,18 @@
 import { Response } from 'express';
 import { red } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, IUserData } from './interfaces';
-import { debug, debugConnId } from './express-ntlm/debug';
-import { UUIDv4 } from './express-ntlm/lib/utils';
+import { debug, debugProxyId } from './express-ntlm/debug';
 
 export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   const opt = (options || {}) as IAuthNtlmOptionsMandatory;
 
-  if (typeof opt.getConnectionId !== 'function') {
-    opt.getConnectionId = (): string => UUIDv4();
-  }
-
+  // As proxyId we use the domain name obtained from challenge messages
+  // or from the getDomain() function
   if (typeof opt.getProxyId !== 'function') {
     opt.getProxyId = (rsn: IRsn): string => {
-      const { socket } = rsn.req;
-      if (!socket.id) {
-        socket.id = opt.getConnectionId(rsn);
-        debugConnId(`↓ ${socket.id}`);
-      }
-      debugConnId(`↑ ${socket.id}`);
-      return socket.id;
+      const proxyId = rsn.req.ntlm.domain || rsn.options.getDomain(rsn) || 'foo';
+      debugProxyId(`↑ ${proxyId}`);
+      return proxyId;
     };
   }
 

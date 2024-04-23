@@ -39,13 +39,7 @@ export enum EAuthStrategy {
 
 export interface IAuthNtlmOptionsMandatory {
   /**
-   * Function to generate custom connection IDs, based optionally on the request
-   * and response objects.
-   */
-  getConnectionId: (rsn: IRsn) => string,
-
-  /**
-   * Function to generate custom proxy cache IDs, based optionally on the request and response objects.
+   * Function to generate custom proxy cache ID.
    */
   getProxyId: (rsn: IRsn) => string,
 

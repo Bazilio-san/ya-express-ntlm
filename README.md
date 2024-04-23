@@ -28,7 +28,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
+process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:proxy-id';
 
 const { authNTLM } = require('../dist/cjs/src/index.js');
 
@@ -61,7 +61,7 @@ import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
+process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:proxy-id';
 
 import { authNTLM, EAuthStrategy } from '../src';
 
@@ -117,7 +117,7 @@ Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/ma
 To enable debug mode, you need to set ENV `DEBUG=ntlm:auth,ntlm:ldap-proxy`
 
 ```shell
-DEBUG=ntlm:auth,ntlm:ldap-proxy npm run test-server,ntlm:conn-id
+DEBUG=ntlm:auth,ntlm:ldap-proxy npm run test-server,ntlm:proxy-id
 ```
 
 

@@ -4,7 +4,7 @@ import { Buffer } from 'buffer';
 import { IAuthNtlmOptions, IRsn } from '../interfaces';
 import { handleAuthenticate } from './handle-authenticate';
 import { handleNegotiate } from './handle-negotiate';
-import { debug, hnColor, hvInColor, hvOutColor } from './debug';
+import { debug, debugProxyId, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
 import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
@@ -78,6 +78,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     const { domain, messageType } = fillReqNtlm(req, ntlmAuthData);
     // Domain names from NTLM messages - we believe
     if (domain) {
+      debugProxyId(`↓ ${domain}`);
       req.ntlm.domain = domain;
     }
 
