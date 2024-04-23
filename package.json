@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
