@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -23,7 +23,8 @@
     "des.js": "^1.1.0",
     "express": "^4.19.2",
     "express-kerberos": "^3.0.0",
-    "js-md4": "^0.3.2"
+    "js-md4": "^0.3.2",
+    "simple-kerberos": "^3.0.0"
   },
   "devDependencies": {
     "@jest/test-sequencer": "^29.7.0",
