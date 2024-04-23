@@ -61,5 +61,6 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   debug(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username
   } ${userData.isAuthenticated ? bg.lGreen : `${bg.lYellow}NOT `}${
     bold}Authenticated${bg.def + boldOff}${reset} / Requested URI: ${uri}`);
+  proxyCache.info('resume');
   return result;
 };

@@ -77,6 +77,7 @@ export const proxyCache = {
         this.remove(id, true);
       }
     });
+    proxyCache.info('clean');
   },
 
   remove (id: string, byTimeout?: boolean) {
@@ -99,6 +100,13 @@ export const proxyCache = {
 
   getProxy<T = TProxy> (id: string): T | undefined {
     return cache[id]?.proxy as T | undefined;
+  },
+
+  info (from = '') {
+    const { length } = Object.keys(cache);
+    if (length) {
+      debugProxy(`[${from}] В кеше ${Object.keys(cache).length} LDAP proxy соединений`);
+    }
   },
 };
 

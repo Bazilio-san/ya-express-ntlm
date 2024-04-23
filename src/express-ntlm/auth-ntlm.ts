@@ -8,7 +8,7 @@ import { debug, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
 import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
-import { transferExistingProps, UUIDv4 } from './lib/utils';
+import { transferExistingProps } from './lib/utils';
 
 /**
  * Returns data from the Authorization header: NTLM <data>
@@ -40,10 +40,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
   const options = prepareOptions(authNtlmOptions);
   return async (req: Request, res: Response, next: NextFunction) => {
     const rsn: IRsn = { req, res, next, options };
-    const userData = options.getCachedUserData(rsn);
-    if (!req.socket.id) { // VVA
-      req.socket.id = UUIDv4();
-    }
+    let userData = options.getCachedUserData(rsn);
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const requestedURI = `${arrowR} ${req.method}: ${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const authorizationHeader = req.headers.authorization;
@@ -94,9 +91,11 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     }
 
     if (messageType === NTLMMessageType.AUTHENTICATE_MESSAGE) {
-      if (!await handleAuthenticate(rsn, dataBuf)) {
+      const isNoErrors = await handleAuthenticate(rsn, dataBuf);
+      if (!isNoErrors) {
         return; // In this case the error has already been sent over HTTP
       }
+      userData = options.getCachedUserData(rsn);
       if (!userData.isAuthenticated) {
         return options.handleHttpError403(rsn);
       }

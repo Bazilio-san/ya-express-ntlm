@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { red } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, IUserData } from './interfaces';
-import { debug } from './express-ntlm/debug';
+import { debug, debugConnId } from './express-ntlm/debug';
 import { UUIDv4 } from './express-ntlm/lib/utils';
 
 export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
@@ -16,13 +16,15 @@ export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMand
       const { socket } = rsn.req;
       if (!socket.id) {
         socket.id = opt.getConnectionId(rsn);
+        debugConnId(`↓ ${socket.id}`);
       }
+      debugConnId(`↑ ${socket.id}`);
       return socket.id;
     };
   }
 
   if (typeof opt.getCachedUserData !== 'function') {
-    opt.getCachedUserData = (rsn: IRsn): Partial<IUserData> => rsn.req.socket.ntlm;
+    opt.getCachedUserData = (rsn: IRsn): Partial<IUserData> => rsn.req.socket?.ntlm || {};
   }
 
   if (typeof opt.addCachedUserData !== 'function') {

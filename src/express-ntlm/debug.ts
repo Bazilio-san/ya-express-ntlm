@@ -20,10 +20,17 @@ export const debugProxy = Debug('ntlm:ldap-proxy', {
   messageColor: reset,
 });
 
-export const debugProxyId = Debug('ntlm:conn-id', {
+export const debugProxyId = Debug('ntlm:proxy-id', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + cyan,
+  messageColor: reset,
+});
+
+export const debugConnId = Debug('ntlm:conn-id', {
+  noTime: true,
+  noPrefix: false,
+  prefixColor: bold + magenta,
   messageColor: reset,
 });
 
