@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { red } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, IUserData } from './interfaces';
 import { debug, debugProxyId } from './express-ntlm/debug';
+import { DELAY_BETWEEN_USER_AUTHENTICATE_CHALLENGES_MILLIS } from './express-ntlm/lib/constants';
 
 export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   const opt = (options || {}) as IAuthNtlmOptionsMandatory;
@@ -40,6 +41,10 @@ export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMand
 
   if (typeof opt.getDomain !== 'function') {
     opt.getDomain = () => 'ALFA';
+  }
+
+  if (typeof opt.getAuthDelay !== 'function') {
+    opt.getAuthDelay = () => DELAY_BETWEEN_USER_AUTHENTICATE_CHALLENGES_MILLIS;
   }
 
   if (typeof opt.handleHttpError400 !== 'function') {

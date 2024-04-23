@@ -21,6 +21,29 @@ const parseNtlmMessageType3 = (msg: Buffer): IUserData => {
   };
 };
 
+const userDelayCache: {
+  cache: { [domainUser: string]: number }, // timestamp of the next available authentication challenge
+  set: (userData: Partial<IUserData>, rsn: IRsn) => void,
+  get: (userData: Partial<IUserData>) => number, // Number of seconds until next login attempt
+} = {
+  cache: {},
+  set (userData: Partial<IUserData>, rsn: IRsn) {
+    this.cache[`${userData.domain}\${${userData.username}}`] = Date.now() + rsn.options.getAuthDelay(rsn);
+  },
+  get (userData: Partial<IUserData>) {
+    const id = `${userData.domain}\${${userData.username}}`;
+    let n = this.cache[id] || 0;
+    if (n) {
+      n = Math.floor(Math.max(0, (n - Date.now()) / 1000));
+    }
+    if (!n) {
+      delete this.cache[id];
+    }
+    return n;
+  },
+};
+// DELAY_BETWEEN_USER_AUTHENTICATE_CHALLENGES_MILLIS getAuthDelay()
+
 export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promise<boolean> => {
   const IS_ERROR = false;
   const IS_SUCCESS = true;
@@ -38,6 +61,11 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   options.addCachedUserData(rsn, req.ntlm as IUserData);
   const userData = req.ntlm;
   const { domain } = userData;
+  const toNextAttemptSec = userDelayCache.get(userData);
+  if (toNextAttemptSec) {
+    options.handleHttpError400(res, `${toNextAttemptSec} seconds left until next login attempt`);
+    return IS_ERROR;
+  }
 
   let result = IS_SUCCESS;
 
@@ -56,6 +84,11 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
       options.handleHttpError500(res, err);
       result = IS_ERROR;
     }
+  }
+  console.log('$$$$$$$$$$$$$$$$$ userData.isAuthenticated', userData.isAuthenticated); // VVR
+  userData.isAuthenticated = false; // VRR
+  if (!userData.isAuthenticated) {
+    userDelayCache.set(userData, rsn);
   }
 
   debug(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username

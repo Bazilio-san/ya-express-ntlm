@@ -65,6 +65,11 @@ export interface IAuthNtlmOptionsMandatory {
   getDomain: (rsn: IRsn) => string | undefined,
 
   /**
+   * Minimum time between failed authentication and next attempt.
+   */
+  getAuthDelay: (rsn: IRsn) => number,
+
+  /**
    * Returns array of domain controllers to handle the authentication.
    * Active Directory is supported.
    * Ex: ['ldap://myad.example']
