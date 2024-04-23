@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import { bg, bold, boldOff, lBlue, reset, yellow } from 'af-color';
-import { EAuthStrategy, IRsn, Iudw } from '../interfaces';
-import { getDomainCookie, isFlagSet, toBinary } from './lib/utils';
+import { EAuthStrategy, IRsn, IUserData } from '../interfaces';
+import { isFlagSet, toBinary, transferExistingProps } from './lib/utils';
 import { proxyCache } from './proxy/proxy-cache';
 import { debug } from './debug';
 
@@ -12,7 +12,7 @@ const getFragmentOfNtlmMessageType3 = (buf: Buffer, offsetPos: number, lenPos: n
   return isUtf16le ? fragmentBuf.toString('utf16le') : fragmentBuf.toString();
 };
 
-const parseNtlmMessageType3 = (msg: Buffer): Iudw => {
+const parseNtlmMessageType3 = (msg: Buffer): IUserData => {
   const isUtf16le = isFlagSet(msg.readUInt8(0x3C), toBinary('00000001'));
   return {
     domain: getFragmentOfNtlmMessageType3(msg, 0x20, 0x1C, isUtf16le),
@@ -28,41 +28,38 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   const { uri } = req.ntlm;
   const strategy = options.getStrategy(rsn);
 
-  getDomainCookie(req);
-
   const udw = parseNtlmMessageType3(messageType3);
   if (!udw.domain) {
     debug(`${yellow}No domain extracted from NTLM message Type 3 ${reset}(for ${uri})`);
   }
 
-  Object.entries(udw).forEach(([k, v]) => {
-    if (v) {
-      req.ntlm[k] = v;
-    }
-  });
+  // req.ntlm may already have data, but MessageType3 may not have all of it.
+  res.locals.ntlm = transferExistingProps(udw, req.ntlm);
+  options.addCachedUserData(rsn, req.ntlm as IUserData);
+  const userData = req.ntlm;
+  const { domain } = userData;
 
   let result = IS_SUCCESS;
 
   if (strategy === EAuthStrategy.NTLM_STUB) {
-    req.ntlm.isAuthenticated = true;
+    userData.isAuthenticated = true;
   } else {
-    const connectionId = options.getConnectionId({ ...rsn, payload: null });
-    const proxy = proxyCache.getProxy(connectionId);
+    const proxyId = options.getProxyId({ ...rsn, payload: null });
+    const proxy = proxyCache.getProxy(proxyId);
     if (!proxy) {
-      options.handleHttpError500(res, `No LDAP proxy found in cache by id '${connectionId}' / domain '${req.ntlm.domain}' (for ${uri})`);
+      options.handleHttpError500(res, `No LDAP proxy found in cache by id '${proxyId}' / domain '${domain}' (for ${uri})`);
       return IS_ERROR;
     }
     try {
-      req.ntlm.isAuthenticated = await proxy.authenticate(messageType3);
+      userData.isAuthenticated = await proxy.authenticate(messageType3);
     } catch (err) {
       options.handleHttpError500(res, err);
       result = IS_ERROR;
     }
   }
 
-  const { username, domain } = req.ntlm;
-  debug(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${username
-  } ${req.ntlm.isAuthenticated ? bg.lGreen : `${bg.lYellow}NOT `}${
+  debug(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username
+  } ${userData.isAuthenticated ? bg.lGreen : `${bg.lYellow}NOT `}${
     bold}Authenticated${bg.def + boldOff}${reset} / Requested URI: ${uri}`);
   return result;
 };

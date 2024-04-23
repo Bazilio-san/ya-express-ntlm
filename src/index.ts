@@ -3,7 +3,7 @@ export { NTLMAuthError } from './express-ntlm/lib/NTLMAuthError';
 
 export {
   TProxy,
-  Iudw,
+  IUserData,
   IRsn,
   IAuthNtlmOptions,
   IAuthNtlmOptionsMandatory,

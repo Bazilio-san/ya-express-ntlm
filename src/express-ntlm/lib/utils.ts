@@ -1,6 +1,4 @@
 import { Buffer } from 'buffer';
-import { CookieOptions, Request, Response } from 'express';
-import { IRsn } from '../../interfaces';
 
 export const concatBuffer = (...args: Buffer[]): Buffer => {
   const buffersArray = Array.prototype.slice.call(args, 0);
@@ -32,33 +30,6 @@ export const UUIDv4 = (): string => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.repla
   return v.toString(16);
 });
 
-const PROXY_ID_COOKIE_NAME = 'YA_NTLM_PROXY_ID';
-const DOMAIN_COOKIE_NAME = 'YA_NTLM_DOMAIN';
-const COOKIE_EXPIRE_MILLIS = 20 * 60_000; // would expire after 60 sec
-
-export const setCookie = (res: Response, name: string, value: string): string => {
-  const cookieOptions: CookieOptions = { expires: new Date(Date.now() + COOKIE_EXPIRE_MILLIS) };
-  res.cookie(name, value, cookieOptions);
-  return value;
-};
-
-export const setProxyIdCookie = (res: Response, value: string): string => setCookie(res, PROXY_ID_COOKIE_NAME, value);
-export const setDomainCookie = (rsn: IRsn, value?: string): string | undefined => {
-  if (value) {
-    rsn.req.ntlm.domain = value;
-    return setCookie(rsn.res, DOMAIN_COOKIE_NAME, value);
-  }
-};
-
-export const getProxyIdCookie = (req: Request): string | undefined => req?.cookies?.[PROXY_ID_COOKIE_NAME];
-export const getDomainCookie = (req: Request): string | undefined => {
-  const domain = req?.cookies?.[DOMAIN_COOKIE_NAME];
-  if (domain) {
-    req.ntlm.domain = domain;
-  }
-  return domain;
-};
-
 export const sanitizeText = (msg?: Buffer) => (msg || '')
   .toString('utf-8')
   .replace(/\s+/sg, ' ')
@@ -66,3 +37,12 @@ export const sanitizeText = (msg?: Buffer) => (msg || '')
   .replace(/([\w.-])♦([\w.-])/g, '$1$2')
   .replace(/([\w.-])♦([\w.-])/g, '$1$2')
   .replace(/[♦\s]{2,}/sg, ' ');
+
+export const transferExistingProps = <T = Record<string, any>> (src: Partial<T>, dest: Partial<T>): Partial<T> => {
+  Object.entries(src).forEach(([k, v]) => {
+    if (v) {
+      dest[k] = v;
+    }
+  });
+  return dest;
+};

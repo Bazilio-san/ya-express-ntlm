@@ -32,7 +32,8 @@ const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Prom
     const messageType2Buf = await proxy.negotiate(messageType1);
     return { proxy, messageType2Buf };
   }
-  let proxy: TProxy | undefined = proxyCache.getProxy(id);
+
+  let proxy = proxyCache.getProxy<NTLMProxy>(id);
 
   const tryProxy = async (isNewProxy?: boolean) => {
     if (proxy) {
@@ -89,19 +90,15 @@ export const proxyCache = {
     }
   },
 
-  addDirect (proxy: TProxy, id: string) {
-    cache[id] = { proxy, expire: Date.now() + PROXY_LIVE_TIME_MILLIS };
-  },
-
-  async add (rsn: IRsn, id: string, messageType1: Buffer): Promise<string> {
+  async addOrReplace (rsn: IRsn, id: string, messageType1: Buffer): Promise<string> {
     const { proxy, messageType2Buf, isNewProxy } = await connectToProxy(rsn, id, messageType1);
     debugProxy(`${isNewProxy ? 'Inserted proxy to' : 'Used proxy from'} cache: id: ${yellow}${id}${rs} / ${proxy.coloredAddress}`);
     cache[id] = { proxy, expire: Date.now() + PROXY_LIVE_TIME_MILLIS };
     return messageType2Buf.toString('base64');
   },
 
-  getProxy (id: string): TProxy | undefined {
-    return cache[id]?.proxy;
+  getProxy<T = TProxy> (id: string): T | undefined {
+    return cache[id]?.proxy as T | undefined;
   },
 };
 

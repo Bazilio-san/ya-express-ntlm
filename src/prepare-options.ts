@@ -1,64 +1,33 @@
 import { Response } from 'express';
-import { red, reset, yellow } from 'af-color';
-import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, Iudw } from './interfaces';
-import { debug, debugConnId } from './express-ntlm/debug';
-import { getProxyIdCookie, setProxyIdCookie, UUIDv4 } from './express-ntlm/lib/utils';
-import { getSuppliedDomainData } from './node-ntlm-core/createMessageType1';
+import { red } from 'af-color';
+import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, IUserData } from './interfaces';
+import { debug } from './express-ntlm/debug';
+import { UUIDv4 } from './express-ntlm/lib/utils';
 
-export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
-  opt = opt || {};
+export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
+  const opt = (options || {}) as IAuthNtlmOptionsMandatory;
 
   if (typeof opt.getConnectionId !== 'function') {
-    const getId = (rsn: IRsn) => {
-      const { req, options } = rsn;
-      let id: string | undefined;
-      const debugFrom = (from: string) => debugConnId(`from '${from}': ${yellow}${id}`);
-      // 1) messageType1
-      const messageType1 = rsn.payload as Buffer;
-      if (messageType1) {
-        id = getSuppliedDomainData(messageType1);
-        if (id) {
-          req.ntlm.domain = id;
-          debugFrom('messageType1');
-          return id;
-        }
-        debugConnId(`${yellow}No domain extracted from NTLM message Type 1 (used ad id for Proxy Cache) ${reset}(for ${req.ntlm.uri})`);
-      }
-      // 2) req.socket.id
-      ({ id } = req.socket);
-      if (id) {
-        debugFrom('req.socket.id');
-        return id;
-      }
-      // 3) Cookie
-      id = getProxyIdCookie(req);
-      if (id) {
-        debugFrom('Cookie');
-        return id;
-      }
-      // 4) ntlm.domain
-      id = req.ntlm.domain;
-      if (id) {
-        debugFrom('req.ntlm.domain');
-        return id;
-      }
-      // 5) getDomain By Host
-      id = options.getDomain(rsn);
-      if (id) {
-        debugFrom('getDomain()');
-        req.ntlm.domain = id;
-        return id;
-      }
-      // 6) UUIDv4
-      id = UUIDv4();
-      debugFrom('UUIDv4()');
-      return id;
-    };
+    opt.getConnectionId = (): string => UUIDv4();
+  }
 
-    opt.getConnectionId = (rsn: IRsn): string => {
-      const id = getId(rsn);
-      rsn.req.socket.id = id;
-      return setProxyIdCookie(rsn.res, id);
+  if (typeof opt.getProxyId !== 'function') {
+    opt.getProxyId = (rsn: IRsn): string => {
+      const { socket } = rsn.req;
+      if (!socket.id) {
+        socket.id = opt.getConnectionId(rsn);
+      }
+      return socket.id;
+    };
+  }
+
+  if (typeof opt.getCachedUserData !== 'function') {
+    opt.getCachedUserData = (rsn: IRsn): Partial<IUserData> => rsn.req.socket.ntlm;
+  }
+
+  if (typeof opt.addCachedUserData !== 'function') {
+    opt.addCachedUserData = (rsn: IRsn, userData: IUserData) => {
+      rsn.req.socket.ntlm = userData;
     };
   }
 
@@ -87,8 +56,10 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
   }
 
   if (typeof opt.handleHttpError403 !== 'function') {
-    opt.handleHttpError403 = (res: Response, udw: Iudw) => {
-      const msg = `HTTP 403: User ${udw.username} did not pass authorization in the "${udw.domain}" domain / ${res.locals.ntlm.uri}`;
+    opt.handleHttpError403 = (rsn: IRsn) => {
+      const { req, res } = rsn;
+      const { username, domain, uri } = req.ntlm || {};
+      const msg = `HTTP 403: User ${username} did not pass authorization in the "${domain}" domain / ${uri}`;
       debug(red + msg);
       res.status(403).send(msg);
     };
@@ -108,5 +79,5 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
     };
   }
 
-  return opt as IAuthNtlmOptionsMandatory;
+  return opt;
 };

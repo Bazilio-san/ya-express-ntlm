@@ -3,7 +3,7 @@ import { ConnectionOptions } from 'node:tls';
 import { NTLMProxy } from './express-ntlm/proxy/NTLMProxy';
 import { NTLMProxyStub } from './express-ntlm/proxy/NTLMProxyStub';
 
-export interface Iudw {
+export interface IUserData {
   username: string,
   domain: string,
   workstation: string
@@ -39,6 +39,27 @@ export enum EAuthStrategy {
 
 export interface IAuthNtlmOptionsMandatory {
   /**
+   * Function to generate custom connection IDs, based optionally on the request
+   * and response objects.
+   */
+  getConnectionId: (rsn: IRsn) => string,
+
+  /**
+   * Function to generate custom proxy cache IDs, based optionally on the request and response objects.
+   */
+  getProxyId: (rsn: IRsn) => string,
+
+  /**
+   * Function to return the cached NTLM user data.
+   */
+  getCachedUserData: (rsn: IRsn) => Partial<IUserData>,
+
+  /**
+   * Function to cache the NTLM user data.
+   */
+  addCachedUserData: (rsn: IRsn, userData: IUserData) => void,
+
+  /**
    * Returns one of two values: NTLM | NTLM_STUB
    */
   getStrategy: (rsn: IRsn) => EAuthStrategy,
@@ -64,7 +85,7 @@ export interface IAuthNtlmOptionsMandatory {
   /**
    * Function to handle HTTP 403 Forbidden.
    */
-  handleHttpError403: (res: Response, udw: Iudw, message?: any) => void,
+  handleHttpError403: (rsn: IRsn) => void,
 
   /**
    * Function to handle HTTP 500 Internal Server Error.
@@ -75,12 +96,6 @@ export interface IAuthNtlmOptionsMandatory {
    * Function to handle Success Authorisation.
    */
   handleSuccessAuthorisation: (rsn: IRsn) => void,
-
-  /**
-   * Function to generate custom connection IDs, based optionally on the request
-   * and response objects.
-   */
-  getConnectionId: (rsn: IRsn) => string,
 
   /**
    * Returns an options object that will be passed to tls.connect and

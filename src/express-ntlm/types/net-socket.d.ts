@@ -1,6 +1,9 @@
 declare module 'net' {
+  import { IUserData } from '../../interfaces';
+
   export interface Socket {
     id: string;
-    _host: string;
+    ntlm: IUserData,
+    _host: string; // VVR
   }
 }

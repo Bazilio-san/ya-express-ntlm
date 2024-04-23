@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { bg, black, blue, bold, boldOff, reset, rs } from 'af-color';
 import { Buffer } from 'buffer';
-import { IAuthNtlmOptions, IRsn, Iudw } from '../interfaces';
+import { IAuthNtlmOptions, IRsn } from '../interfaces';
 import { handleAuthenticate } from './handle-authenticate';
 import { handleNegotiate } from './handle-negotiate';
 import { debug, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
 import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
-import { setDomainCookie, UUIDv4 } from './lib/utils';
+import { transferExistingProps, UUIDv4 } from './lib/utils';
 
 /**
  * Returns data from the Authorization header: NTLM <data>
@@ -39,9 +39,9 @@ const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
 export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
   const options = prepareOptions(authNtlmOptions);
   return async (req: Request, res: Response, next: NextFunction) => {
-    // @ts-ignore
-    if (!req.socket.id) {
-      // @ts-ignore
+    const rsn: IRsn = { req, res, next, options };
+    const userData = options.getCachedUserData(rsn);
+    if (!req.socket.id) { // VVA
       req.socket.id = UUIDv4();
     }
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
@@ -49,19 +49,16 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     const authorizationHeader = req.headers.authorization;
     const uriA = `${requestedURI} : ${authorizationHeader ? `${hnColor}Authorization: ${hvInColor}${
       authorizationHeader || ''}` : `${hnColor}No Authorization header`}`;
-    const rsn: IRsn = { req, res, next, options };
 
     req.ntlm = req.ntlm || { uri };
-    res.locals.ntlm = req.ntlm;
-    const { ntlm } = req;
 
     const mTitle = `============ Start NTLM Authorization. Strategy: '${options.getStrategy(rsn)}' ==================`;
 
     // req.ntlm.isAuthenticated must be filled in earlier when determining the presence of a session cookie
-    if (ntlm.isAuthenticated) {
+    if (userData.isAuthenticated) {
       if (!authorizationHeader || (authorizationHeader && req.method !== 'POST')) {
-        debug(`${requestedURI}\nConnection already authenticated${
-          ntlm.username ? ` for user: ${ntlm.domain ? `${ntlm.domain}/` : ''}${ntlm.username}` : ''}`);
+        const { username, domain } = transferExistingProps({ ...userData, uri }, req.ntlm);
+        debug(`${requestedURI}\nConnection already authenticated / user: ${username} / domain: ${domain}`);
         return next();
       }
       debug(`The connection is authenticated, but the "Authorization" header sent using the POST method was detected`);
@@ -84,7 +81,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     const { domain, messageType } = fillReqNtlm(req, ntlmAuthData);
     // Domain names from NTLM messages - we believe
     if (domain) {
-      setDomainCookie(rsn, domain);
+      req.ntlm.domain = domain;
     }
 
     const dataBuf = Buffer.from(ntlmAuthData, 'base64');
@@ -100,12 +97,12 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
       if (!await handleAuthenticate(rsn, dataBuf)) {
         return; // In this case the error has already been sent over HTTP
       }
-      if (!ntlm.isAuthenticated) {
-        return options.handleHttpError403(res, ntlm as Iudw);
+      if (!userData.isAuthenticated) {
+        return options.handleHttpError403(rsn);
       }
       if (debug.enabled) {
         // eslint-disable-next-line no-console
-        console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, ntlm, `\n`);
+        console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, userData, `\n`);
       }
       options.handleSuccessAuthorisation(rsn);
       debug(`${Larrow} handle success authorisation (Default ${bold + reset}next${blue}()${boldOff}${reset})`);
