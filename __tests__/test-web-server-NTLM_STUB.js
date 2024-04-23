@@ -9,7 +9,7 @@ process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:conn-id';
 const { authNTLM } = require('../dist/cjs/src/index.js');
 
 const app = express();
-const port = 8080;
+const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
   getStrategy: () => 'NTLM_STUB',
