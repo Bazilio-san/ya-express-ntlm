@@ -8,7 +8,7 @@ import { debug, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
 import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
-import { setDomainCookie } from './lib/utils';
+import { setDomainCookie, UUIDv4 } from './lib/utils';
 
 /**
  * Returns data from the Authorization header: NTLM <data>
@@ -39,6 +39,11 @@ const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
 export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => {
   const options = prepareOptions(authNtlmOptions);
   return async (req: Request, res: Response, next: NextFunction) => {
+    // @ts-ignore
+    if (!req.socket.id) {
+      // @ts-ignore
+      req.socket.id = UUIDv4();
+    }
     const uri = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const requestedURI = `${arrowR} ${req.method}: ${req.protocol}://${req.get('host')}${req.originalUrl}`;
     const authorizationHeader = req.headers.authorization;

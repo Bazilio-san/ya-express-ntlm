@@ -8,14 +8,6 @@ import { getSuppliedDomainData } from './node-ntlm-core/createMessageType1';
 export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   opt = opt || {};
 
-  if (typeof opt.getStrategy !== 'function') {
-    opt.getStrategy = () => EAuthStrategy.NTLM;
-  }
-
-  if (typeof opt.getTlsOptions !== 'function') {
-    opt.getTlsOptions = () => undefined;
-  }
-
   if (typeof opt.getConnectionId !== 'function') {
     const getId = (rsn: IRsn) => {
       const { req, options } = rsn;
@@ -32,32 +24,50 @@ export const prepareOptions = (opt?: IAuthNtlmOptions): IAuthNtlmOptionsMandator
         }
         debugConnId(`${yellow}No domain extracted from NTLM message Type 1 (used ad id for Proxy Cache) ${reset}(for ${req.ntlm.uri})`);
       }
-      // 2) Cookie
+      // 2) req.socket.id
+      ({ id } = req.socket);
+      if (id) {
+        debugFrom('req.socket.id');
+        return id;
+      }
+      // 3) Cookie
       id = getProxyIdCookie(req);
       if (id) {
         debugFrom('Cookie');
         return id;
       }
-      // 3) ntlm.domain
+      // 4) ntlm.domain
       id = req.ntlm.domain;
       if (id) {
         debugFrom('req.ntlm.domain');
         return id;
       }
-      // 4) getDomain By Host
+      // 5) getDomain By Host
       id = options.getDomain(rsn);
       if (id) {
         debugFrom('getDomain()');
         req.ntlm.domain = id;
         return id;
       }
-      // 5) UUIDv4
+      // 6) UUIDv4
       id = UUIDv4();
       debugFrom('UUIDv4()');
       return id;
     };
 
-    opt.getConnectionId = (rsn: IRsn): string => setProxyIdCookie(rsn.res, getId(rsn));
+    opt.getConnectionId = (rsn: IRsn): string => {
+      const id = getId(rsn);
+      rsn.req.socket.id = id;
+      return setProxyIdCookie(rsn.res, id);
+    };
+  }
+
+  if (typeof opt.getStrategy !== 'function') {
+    opt.getStrategy = () => EAuthStrategy.NTLM;
+  }
+
+  if (typeof opt.getTlsOptions !== 'function') {
+    opt.getTlsOptions = () => undefined;
   }
 
   if (typeof opt.getDomainControllers !== 'function') {
