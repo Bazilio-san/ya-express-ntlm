@@ -17,5 +17,3 @@ export {
   createMessageType3,
   Type3MessageOptions,
 } from './createMessageType3';
-
-export { parseMessageType2 } from './parseMessageType2';

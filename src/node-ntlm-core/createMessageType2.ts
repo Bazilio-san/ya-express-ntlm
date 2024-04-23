@@ -11,7 +11,7 @@ const TARGET_TYPE_DOMAIN = 1 << 16;
 const NEGOTIATE_NTLM2_KEY = 1 << 19;
 const NEGOTIATE_TARGET_INFO = 1 << 23;
 
-export const createMessageType2 = (messageType1: Buffer, flag?: boolean): Buffer => { // VVQ VVR flag
+export const createMessageType2 = (messageType1: Buffer): Buffer => {
   const targetName = getSuppliedDomainData(messageType1);
 
   let challengeFlags = REQUEST_TARGET | TARGET_TYPE_DOMAIN;
@@ -80,8 +80,7 @@ export const createMessageType2 = (messageType1: Buffer, flag?: boolean): Buffer
 
   if (ntlmVersion === 2) {
     // Target info data
-    // offset = messageType2.writeUInt16LE(0x0002, offset); // Domain // VVA in the latest version of the author!!!
-    offset = messageType2.writeUInt16LE(0x0200, offset); // Domain 0x0200
+    offset = messageType2.writeUInt16LE(0x0002, offset); // Domain
     offset = messageType2.writeUInt16LE(targetName.length * 2, offset);
     offset += messageType2.write(targetName, offset, 'ucs2');
     offset = messageType2.writeUInt16LE(0x0000, offset); // Terminator block

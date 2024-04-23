@@ -4,6 +4,7 @@ import { EAuthStrategy, IRsn, IUserData } from '../interfaces';
 import { isFlagSet, toBinary, transferExistingProps } from './lib/utils';
 import { proxyCache } from './proxy/proxy-cache';
 import { debug } from './debug';
+import { userDelayCache } from './user-delay-cache';
 
 const getFragmentOfNtlmMessageType3 = (buf: Buffer, offsetPos: number, lenPos: number, isUtf16le: boolean): string => {
   const offset = buf.readUInt32LE(offsetPos);
@@ -12,7 +13,7 @@ const getFragmentOfNtlmMessageType3 = (buf: Buffer, offsetPos: number, lenPos: n
   return isUtf16le ? fragmentBuf.toString('utf16le') : fragmentBuf.toString();
 };
 
-const parseNtlmMessageType3 = (msg: Buffer): IUserData => {
+const getUdwFromMessageType3 = (msg: Buffer): IUserData => {
   const isUtf16le = isFlagSet(msg.readUInt8(0x3C), toBinary('00000001'));
   return {
     domain: getFragmentOfNtlmMessageType3(msg, 0x20, 0x1C, isUtf16le),
@@ -21,29 +22,6 @@ const parseNtlmMessageType3 = (msg: Buffer): IUserData => {
   };
 };
 
-const userDelayCache: {
-  cache: { [domainUser: string]: number }, // timestamp of the next available authentication challenge
-  set: (userData: Partial<IUserData>, rsn: IRsn) => void,
-  get: (userData: Partial<IUserData>) => number, // Number of seconds until next login attempt
-} = {
-  cache: {},
-  set (userData: Partial<IUserData>, rsn: IRsn) {
-    this.cache[`${userData.domain}\${${userData.username}}`] = Date.now() + rsn.options.getAuthDelay(rsn);
-  },
-  get (userData: Partial<IUserData>) {
-    const id = `${userData.domain}\${${userData.username}}`;
-    let n = this.cache[id] || 0;
-    if (n) {
-      n = Math.floor(Math.max(0, (n - Date.now()) / 1000));
-    }
-    if (!n) {
-      delete this.cache[id];
-    }
-    return n;
-  },
-};
-// DELAY_BETWEEN_USER_AUTHENTICATE_CHALLENGES_MILLIS getAuthDelay()
-
 export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promise<boolean> => {
   const IS_ERROR = false;
   const IS_SUCCESS = true;
@@ -51,7 +29,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   const { uri } = req.ntlm;
   const strategy = options.getStrategy(rsn);
 
-  const udw = parseNtlmMessageType3(messageType3);
+  const udw = getUdwFromMessageType3(messageType3);
   if (!udw.domain) {
     debug(`${yellow}No domain extracted from NTLM message Type 3 ${reset}(for ${uri})`);
   }

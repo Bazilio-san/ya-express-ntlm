@@ -62,7 +62,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     }
 
     if (userData.isAuthenticated === false) { // VVR
-      console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+      console.log('&&&&&&&&&&&&&&&&&&&&&&       userData.isAuthenticated === false                &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
     }
 
     debug(uriA);

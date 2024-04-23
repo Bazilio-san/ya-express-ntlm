@@ -32,8 +32,6 @@ export {
   Type3MessageOptions,
 } from './node-ntlm-core/createMessageType3';
 
-export { parseMessageType2 } from './node-ntlm-core/parseMessageType2';
-
 export {
   NTLMMessageParsed,
   NTLMMessageType,
