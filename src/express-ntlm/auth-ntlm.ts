@@ -76,7 +76,6 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     }
     // Fills req.ntlm with data from the Authorization header: NTLM <data>.
     const { domain, messageType } = fillReqNtlm(req, ntlmAuthData);
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', messageType, domain); // VVR
     // Domain names from NTLM messages - we believe
     if (domain) {
       debugProxyId(`↓ ${domain}`);
