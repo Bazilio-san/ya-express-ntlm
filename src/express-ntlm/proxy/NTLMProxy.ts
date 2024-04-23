@@ -47,6 +47,7 @@ export class NTLMProxy {
   }
 
   private openConnection (resolve: (data: Buffer) => void, reject: (err: Error) => void) {
+    // @ts-ignore
     const isSameConnectionOpened = this.socket?._host === this.host && this.socket?.readyState === 'open';
     if (isSameConnectionOpened) {
       debugProxy(`connection to ${this.coloredAddress} already opened`);

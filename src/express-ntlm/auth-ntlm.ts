@@ -61,10 +61,6 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
       debug(`The connection is authenticated, but the "Authorization" header sent using the POST method was detected`);
     }
 
-    if (userData.isAuthenticated === false) { // VVR
-      console.log('&&&&&&&&&&&&&&&&&&&&&&       userData.isAuthenticated === false                &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-    }
-
     debug(uriA);
     if (!authorizationHeader) {
       debug(mTitle);

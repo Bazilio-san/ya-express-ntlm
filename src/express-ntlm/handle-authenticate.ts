@@ -63,8 +63,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
       result = IS_ERROR;
     }
   }
-  console.log('$$$$$$$$$$$$$$$$$ userData.isAuthenticated', userData.isAuthenticated); // VVR
-  userData.isAuthenticated = false; // VRR
+
   if (!userData.isAuthenticated) {
     userDelayCache.set(userData, rsn);
   }
