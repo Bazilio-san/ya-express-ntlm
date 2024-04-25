@@ -13,6 +13,7 @@ const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
   getStrategy: () => 'NTLM_STUB',
+  getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
 }));
 
 app.all('*', (req, res) => {

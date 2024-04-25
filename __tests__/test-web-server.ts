@@ -14,7 +14,7 @@ const port = Number(process.env.TEST_PORT) || 8080;
 app.use(authNTLM({
   getStrategy: () => EAuthStrategy.NTLM,
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
-  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
+  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://dc.mydomain.myorg.com'],
 }));
 
 app.all('*', (req: Request, res: Response) => {

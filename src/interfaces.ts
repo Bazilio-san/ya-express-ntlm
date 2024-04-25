@@ -72,7 +72,7 @@ export interface IAuthNtlmOptionsMandatory {
   /**
    * Returns array of domain controllers to handle the authentication.
    * Active Directory is supported.
-   * Ex: ['ldap://myad.example']
+   * Ex: ['ldap://dc.mydomain.myorg.com']
    */
   getDomainControllers: (rsn: IRsn) => string[],
 
