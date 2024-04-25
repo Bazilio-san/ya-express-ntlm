@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:proxy-id';
+process.env.DEBUG = 'ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id';
 
 import { authNTLM, EAuthStrategy } from '../src';
 

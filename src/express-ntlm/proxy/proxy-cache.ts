@@ -105,7 +105,7 @@ export const proxyCache = {
   info (from = '') {
     const { length } = Object.keys(cache);
     if (length) {
-      debugProxy(`[${from}] В кеше ${Object.keys(cache).length} LDAP proxy соединений`);
+      debugProxy(`[${from}] In cache ${Object.keys(cache).length} LDAP proxy connections`);
     }
   },
 };

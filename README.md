@@ -28,7 +28,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:proxy-id';
+process.env.DEBUG = 'ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id';
 
 const { authNTLM } = require('../dist/cjs/src/index.js');
 
@@ -61,7 +61,7 @@ import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
 dotenv.config();
-process.env.DEBUG = 'ntlm:auth,ntlm:ldap-proxy,ntlm:proxy-id';
+process.env.DEBUG = 'ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id';
 
 import { authNTLM, EAuthStrategy } from '../src';
 
@@ -104,22 +104,24 @@ app.use(authNTLM({
 
 ## options
 
-All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L39)     
+All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L40)     
 
 
-Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L8).
+Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L7).
 
 
 
 
 ### Debugging
 
-To enable debug mode, you need to set ENV `DEBUG=ntlm:auth,ntlm:ldap-proxy`
+You can view the entire authorization process in detail.
+To enable debug mode, you need to set ENV `DEBUG`
 
 ```shell
-DEBUG=ntlm:auth,ntlm:ldap-proxy npm run test-server,ntlm:proxy-id
+DEBUG=ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id
 ```
 
+<img src="debug.png" alt="debug" style="zoom: 67%;" />
 
 
 
@@ -147,4 +149,4 @@ https://web.archive.org/web/20200724074947/https://www.innovation.ch/personal/ro
 
 **Typical NTLM handshake looks like this**
 
-<img src="NTLM-Authorisation.png" alt="NTLM-Authorisation.png" style="zoom: 67%;" />
+<img src="NTLM-Authorisation.png" alt="NTLM-Authorisation" style="zoom: 67%;" />

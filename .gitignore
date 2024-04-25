@@ -3,25 +3,6 @@
 node_modules
 !.gitkeep
 
-# Quasar core related directories
-.quasar
-/dist
-/build/
-
-# Cordova related directories and files
-/src-cordova/node_modules
-/src-cordova/platforms
-/src-cordova/plugins
-/src-cordova/www
-
-# Capacitor related directories and files
-/src-capacitor/www
-/src-capacitor/node_modules
-
-# BEX related directories and files
-/src-bex/www
-/src-bex/js/core
-
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -33,15 +14,15 @@ yarn-error.log*
 # DEV directories
 /__misc/
 /_tmp/
+/dist/
 
-
-# Файлы, формируемые realtime
+# Files generated in realtime
 /_files/
 /_logs/
 /_cache/
 /deploy/config.yml
 
-# Частные исключения
+# Special exceptions
 /config/local.*
 /config/local-*.*
 /t.*
@@ -50,13 +31,9 @@ yarn-error.log*
 /.env.pm2
 /.env
 /config/__servers__/
-/src/jira/export.*
 /1.js
 /2.js
 ~$*.*
-/src/jira/sync/issues/issues.xlsx
-/src/_ones/cosine-sim-matrix/exports/
-/src/_ones/alex-tele/
 *.rar
-*.keytab
-/src/auth-ntlm/
+
+
