@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -58,8 +58,8 @@
     "url": "git+https://github.com/Bazilio-san/ya-express-ntlm.git"
   },
   "engines": {
-    "node": ">= 18.19.0",
-    "npm": ">= 10.2.3",
+    "node": ">= 16",
+    "npm": ">= 8",
     "yarn": ">= 1.22.19"
   },
   "keywords": [
