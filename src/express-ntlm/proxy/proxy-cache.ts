@@ -1,7 +1,7 @@
 import { blue, lBlue, reset, rs, yellow } from 'af-color';
 import { Buffer } from 'buffer';
 import { IRsn, TProxy } from '../../interfaces';
-import { debug, debugProxy } from '../debug';
+import { debugProxy } from '../debug';
 import { NTLMProxyStub } from './NTLMProxyStub';
 import { NTLMProxy } from './NTLMProxy';
 
@@ -54,7 +54,7 @@ const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Prom
   for (let i = 0; i < controllers.length; i++) {
     const ldapServer = new URL(controllers[i]);
     const decodedPath = decodeURI(ldapServer.pathname || '');
-    debug(`Choose LDAP server ${blue}${ldapServer.host}${reset}${
+    debugProxy(`Choose LDAP server ${blue}${ldapServer.host}${reset}${
       decodedPath ? ` using base DN "${decodedPath}"` : ''}`);
     proxy = new NTLMProxy({
       id,
