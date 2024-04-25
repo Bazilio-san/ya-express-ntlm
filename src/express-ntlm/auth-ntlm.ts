@@ -65,7 +65,11 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     if (!authorizationHeader) {
       debug(mTitle);
       debug(`${Larrow} Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
-      return res.setHeader('WWW-Authenticate', 'NTLM').status(401).end();
+      return res
+        .setHeader('WWW-Authenticate', 'NTLM')
+        .setHeader('Proxy-Support', 'Session-Based-Authentication')
+        .status(401)
+        .end();
     }
 
     // Returns data from the Authorization header: NTLM <data>
