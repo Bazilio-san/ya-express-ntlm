@@ -2,15 +2,25 @@
 
 # ya-express-ntlm
 
-An express middleware to have basic NTLM-authentication in node.js.
+An **express** middleware to have basic **NTLM-authentication** in node.js.
 
 
-Based on 
-- [express-ntlm](https://www.npmjs.com/package/express-ntlm)
-- [@node-ntlm/core](https://www.npmjs.com/package/@node-ntlm/core)
-- [ntlm-parser](https://www.npmjs.com/package/ntlm-parser)
 
 
+
+
+
+The project [express-ntlm](https://www.npmjs.com/package/express-ntlm) was taken as a basis and rewritten in TypeScript.
+- The logic for caching the connection to the LDAP server has been changed.
+  The default connection ID is now the domain name.
+- Added a delay after an unsuccessful authorization attempt on the LDAP server. 
+  If the password is entered incorrectly, this prevents the user from being locked out.
+  if the domain controller has a blocking policy set after, for example,
+  3 failed authentication attempts within 1 minute.
+- Added advanced logging in debug mode with decoded NTLM messages. Using code from the project
+  [ntlm-parser](https://www.npmjs.com/package/ntlm-parser). 
+- In "NTLM_STUB" mode the LDAP server is not used. And the NTLM message Type 2 
+  is generated using code taken from the project [@node-ntlm/core](https://www.npmjs.com/package/@node-ntlm/core).
 
 
 ## install
