@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -61,5 +61,11 @@
     "node": ">= 18.19.0",
     "npm": ">= 10.2.3",
     "yarn": ">= 1.22.19"
-  }
+  },
+  "keywords": [
+    "express",
+    "ntlm",
+    "ldap",
+    "authentication"
+  ]
 }
