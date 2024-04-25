@@ -100,7 +100,6 @@ validation. This means you can authenticate without providing valid credentials.
 app.use(authNTLM({
   getStrategy: () => 'NTLM_STUB',
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
-  getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://myad.example'],
 }));
 ```
 

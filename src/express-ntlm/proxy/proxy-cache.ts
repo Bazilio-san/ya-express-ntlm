@@ -24,8 +24,6 @@ const cache: {
 
 const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Promise<IAddProxyResult> => {
   const strategy = rsn.options.getStrategy(rsn);
-  const tlsOptions = rsn.options.getTlsOptions(rsn);
-  const controllers = rsn.options.getDomainControllers(rsn);
 
   if (strategy === 'NTLM_STUB') {
     const proxy = new NTLMProxyStub(id);
@@ -51,6 +49,8 @@ const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Prom
   if (result) {
     return result;
   }
+  const tlsOptions = rsn.options.getTlsOptions(rsn);
+  const controllers = rsn.options.getDomainControllers(rsn);
   for (let i = 0; i < controllers.length; i++) {
     const ldapServer = new URL(controllers[i]);
     const decodedPath = decodeURI(ldapServer.pathname || '');
