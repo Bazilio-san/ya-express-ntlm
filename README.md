@@ -21,19 +21,23 @@ npm install ya-express-ntlm
 
 
 
-## example usage (JS)
+## Usage example
+
+
+
+#### JS
 
 ```js
 const dotenv = require('dotenv');
-const express = require('express');
 
 dotenv.config();
+const express = require('express');
+const { authNTLM } = require('ya-express-ntlm');
+
 process.env.DEBUG = 'ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id';
 
-const { authNTLM } = require('../dist/cjs/src/index.js');
-
 const app = express();
-const port = 8080;
+const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
   getStrategy: () => 'NTLM',
@@ -54,7 +58,7 @@ console.log(`Server listening on http://localhost:${port}`);
 
 
 
-## example usage (TypeScript)
+#### TypeScript
 
 ```js
 import * as dotenv from 'dotenv';
@@ -63,10 +67,10 @@ import express, { Request, Response } from 'express';
 dotenv.config();
 process.env.DEBUG = 'ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id';
 
-import { authNTLM, EAuthStrategy } from '../src';
+import { authNTLM, EAuthStrategy } from 'ya-express-ntlm';
 
 const app: express.Express = express();
-const port = 8080;
+const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
   getStrategy: () => EAuthStrategy.NTLM,
@@ -87,7 +91,7 @@ console.log(`Server listening on http://localhost:${port}`);
 
 
 
-### without validation
+## Without validation
 
 It's not recommended, but it's possible to add NTLM-Authentication without 
 validation. This means you can authenticate without providing valid credentials.
@@ -102,7 +106,7 @@ app.use(authNTLM({
 
 
 
-## options
+## Options
 
 All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L40)     
 
@@ -112,7 +116,7 @@ Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/ma
 
 
 
-### Debugging
+## Debugging
 
 You can view the entire authorization process in detail.
 To enable debug mode, you need to set ENV `DEBUG`
@@ -125,7 +129,7 @@ DEBUG=ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id
 
 
 
-### notes
+## Notes
 
 All NTLM-fields (`username`, `domain`, `workstation`) are also available within
 `response.locals.ntlm`, which means you can access it through your template 
