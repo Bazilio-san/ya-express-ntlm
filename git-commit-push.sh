@@ -30,6 +30,6 @@ update_version
 
 git add --all
 git commit -m "$old_version" --no-verify
-git push github refs/heads/master:master
+git push
 
 read -p "Press any key to resume ..."
