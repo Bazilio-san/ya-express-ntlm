@@ -60,7 +60,7 @@ console.log(`Server listening on http://localhost:${port}`);
 
 #### TypeScript
 
-```js
+```typescript
 import * as dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
@@ -88,6 +88,23 @@ app.listen(port);
 console.log(`Server listening on http://localhost:${port}`);
 ```
 
+To use the `req.ntlm` object in your TypeScript project, add the file `express-augmented.d.ts`
+
+```typescript
+declare global {
+  namespace Express {
+    export interface Request {
+      ntlm: {
+        username?: string,
+        domain?: string,
+        workstation?: string,
+        isAuthenticated?: boolean,
+        uri?: string,
+      },
+    }
+  }
+}
+```
 
 
 
