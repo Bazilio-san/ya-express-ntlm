@@ -174,9 +174,9 @@ DEBUG=ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id
 To experiment with NTLM messages:
 
 ```typescript
-import { startDecoder } from 'ya-express-ntlm';
+import { startCoder } from 'ya-express-ntlm';
 
-startDecoder();
+startCoder();
 ```
 
 <img src="img/create-ntlm-message.png" alt="Create NTLM message" />

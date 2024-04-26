@@ -37,7 +37,7 @@ export const startCoder = () => {
   });
 
   app.get('/', (req: Request, res: Response) => {
-    let html = fs.readFileSync(path.join(process.cwd(), './src/ntlm-parser/coder/coder.html'), { encoding: 'utf8' });
+    let html = fs.readFileSync(path.join(__dirname, 'coder.html').replace(/[\\/]dist[\\/](?:cjs|esm)/, ''), { encoding: 'utf8' });
     html = html.replace(/{{host}}/g, host).replace(/{{port}}/g, String(port));
     res.setHeader('Content-Type', 'text/html; charset=utf-8').send(html);
   });
