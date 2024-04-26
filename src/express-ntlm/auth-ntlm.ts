@@ -65,7 +65,17 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     if (!authorizationHeader) {
       debugNtlmAuthFlow(mTitle);
       debugNtlmAuthFlow(`${Larrow} Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
-      return res.setHeader('WWW-Authenticate', 'NTLM').status(401).end();
+      return res
+        .setHeader('Content-Type', 'text/plain; charset=utf-8')
+        .setHeader('Server', 'Microsoft-IIS/10.0')
+        .setHeader('SPRequestDuration', '2')
+        .setHeader('SPIisLatency', '0')
+        .setHeader('WWW-Authenticate', 'NTLM')
+        .setHeader('X-Powered-By', 'nosniff')
+        .setHeader('MicrosoftSharePointTeamServices', '16.0.0.10337: 1; RequireReadOnly')
+        .setHeader('Date', (new Date()).toUTCString())
+        .status(401)
+        .send('401 UNAUTHORIZED');
     }
 
     // Returns data from the Authorization header: NTLM <data>
