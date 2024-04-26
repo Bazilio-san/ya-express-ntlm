@@ -61,4 +61,5 @@ export const ntlmParse = (str: string, opts?: Partial<NtlmParseOptions>): NTLMMe
   return result;
 };
 
+export { startCoder } from './coder/coder';
 export * from './parser-interfaces';

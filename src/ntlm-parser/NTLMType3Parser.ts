@@ -30,6 +30,11 @@ export class NTLMType3Parser extends AbstractParser {
     const result: NTLMType3 = {
       messageType: NTLMMessageType.AUTHENTICATE_MESSAGE,
       version: 1,
+      domain,
+      username,
+      workstation,
+      flags: undefined,
+      sessionKey: undefined,
       lmResponse,
       ntlmResponse,
       targetName,
@@ -37,9 +42,6 @@ export class NTLMType3Parser extends AbstractParser {
       workstationName,
       lmResponseData,
       ntlmResponseData,
-      domain,
-      username,
-      workstation,
     };
 
     const firstOffset = Math.min(

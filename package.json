@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -16,7 +16,7 @@
     "prepare": "husky",
     "test-js": "node ./__tests__/test-web-server-js.js",
     "test-js-stub": "node ./__tests__/test-web-server-NTLM_STUB.js",
-    "decoder": "node ./dist/cjs/__tests__/decoder/decoder.js"
+    "coder": "node ./dist/cjs/src/ntlm-parser/coder/start-coder.js"
   },
   "dependencies": {
     "af-color": "^0.0.8",

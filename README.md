@@ -142,6 +142,15 @@ Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/ma
 
 
 
+## Notes
+
+All NTLM-fields (`username`, `domain`, `workstation`) are also available within
+`response.locals.ntlm`, which means you can access it through your template
+engine (e.g. jade or ejs) while rendering (e.g. `<%= ntlm.username %>`).
+
+
+
+
 ## Debugging
 
 You can view the entire authorization process in detail.
@@ -151,16 +160,28 @@ To enable debug mode, you need to set ENV `DEBUG`
 DEBUG=ntlm:auth-flow,ntlm:ldap-proxy,ntlm:ldap-proxy-id
 ```
 
-<img src="debug.png" alt="debug" style="zoom: 67%;" />
+<img src="debug.png" alt="debug" />
 
 
 
-## Notes
+**Typical NTLM handshake looks like this**
 
-All NTLM-fields (`username`, `domain`, `workstation`) are also available within
-`response.locals.ntlm`, which means you can access it through your template 
-engine (e.g. jade or ejs) while rendering (e.g. `<%= ntlm.username %>`).
+<img src="img/NTLM-Authorisation.png" alt="NTLM-Authorisation" />
 
+
+## Create / Decode NTLM messages
+
+To experiment with NTLM messages:
+
+```typescript
+import { startDecoder } from 'ya-express-ntlm';
+
+startDecoder();
+```
+
+<img src="img/create-ntlm-message.png" alt="Create NTLM message" />
+
+<img src="img/decode-ntlm-message.png" alt="Decode NTLM message" />
 
 
 
@@ -175,8 +196,3 @@ http://davenport.sourceforge.net/ntlm.html
 NTLM Authentication Scheme for HTTP:  
 https://web.archive.org/web/20200724074947/https://www.innovation.ch/personal/ronald/ntlm.html
 
-
-
-**Typical NTLM handshake looks like this**
-
-<img src="NTLM-Authorisation.png" alt="NTLM-Authorisation" style="zoom: 67%;" />
