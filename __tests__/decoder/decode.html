@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decoding an NTLM message</title>
+  <style>
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .to-center {
+      max-width: 800px;
+      min-width: 800px;
+      flex-direction: column;
+      display: flex;
+    }
+
+    h4 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      width: 100%;
+      height: 150px;
+      box-sizing: border-box;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 5px 25px;
+      margin-top: 10px;
+    }
+    #decodedMessage {
+      background-color: aliceblue;
+      padding: 5px;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+      /*noinspection CssInvalidPropertyValue*/
+      text-wrap: balance;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="to-center">
+    <h4>NTLM message base64 encded</h4>
+    <textarea class="message" id="message" rows="5" cols="80"></textarea>
+    <button class="btn" onclick="decodeMessage()">Decode</button>
+    <pre id="decodedMessage"></pre>
+  </div>
+</div>
+
+<script>
+const decodeMessage = () => {
+  const message = document.getElementById('message').value;
+
+  fetch('http://{{host}}:{{port}}/decode', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 'message': message }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('decodedMessage').innerText = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+};
+</script>
+
+</body>
+</html>
