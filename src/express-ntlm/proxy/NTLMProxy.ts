@@ -4,7 +4,7 @@ import { ConnectionOptions } from 'node:tls';
 import { Buffer } from 'buffer';
 import { lBlue, magenta, rs, yellow, reset } from 'af-color';
 import { LDAPContext } from '../lib/LDAPContext';
-import { debugProxy } from '../debug';
+import { debugNtlmLdapProxy } from '../debug';
 import { sanitizeText } from '../lib/utils';
 import { arrowRR, LLarrow } from '../lib/constants';
 
@@ -41,7 +41,7 @@ export class NTLMProxy {
 
   close () {
     if (this.socket?.readyState === 'open') {
-      debugProxy(`Close connection to ${this.coloredAddress}`);
+      debugNtlmLdapProxy(`Close connection to ${this.coloredAddress}`);
       this.socket?.end();
     }
   }
@@ -50,7 +50,7 @@ export class NTLMProxy {
     // @ts-ignore
     const isSameConnectionOpened = this.socket?._host === this.host && this.socket?.readyState === 'open';
     if (isSameConnectionOpened) {
-      debugProxy(`connection to ${this.coloredAddress} already opened`);
+      debugNtlmLdapProxy(`connection to ${this.coloredAddress} already opened`);
     } else {
       this.close();
       this.socket = this.tlsOptions
@@ -58,7 +58,7 @@ export class NTLMProxy {
         : net.createConnection(this.port, this.host);
       this.socket.setTimeout(5000);
       this.socket.setKeepAlive(true);
-      debugProxy(`Opened connection to ${this.coloredAddress}`);
+      debugNtlmLdapProxy(`Opened connection to ${this.coloredAddress}`);
     }
     this.socket?.once('data', resolve);
     this.socket?.once('error', reject);
@@ -68,8 +68,8 @@ export class NTLMProxy {
     if (!this.socket) {
       throw new Error('Transaction on closed socket.');
     }
-    if (debugProxy.enabled) {
-      debugProxy(`${arrowRR} ${operationType} Send to ${this.coloredAddress}:\t${yellow}${sanitizeText(msgBuf)}`);
+    if (debugNtlmLdapProxy.enabled) {
+      debugNtlmLdapProxy(`${arrowRR} ${operationType} Send to ${this.coloredAddress}:\t${yellow}${sanitizeText(msgBuf)}`);
     }
     this.socket.write(msgBuf);
   }
@@ -81,7 +81,7 @@ export class NTLMProxy {
         try {
           const { serverSaslCreds } = this.ldapContext?.parseSessionSetupRESP(data) || {};
           resolve(serverSaslCreds);
-          debugProxy(`${LLarrow} ${operationType} Receive ${this.coloredAddress}:\t${lBlue}${sanitizeText(serverSaslCreds)}`);
+          debugNtlmLdapProxy(`${LLarrow} ${operationType} Receive ${this.coloredAddress}:\t${lBlue}${sanitizeText(serverSaslCreds)}`);
         } catch (err: Error | any) {
           reject(err);
         }
@@ -100,7 +100,7 @@ export class NTLMProxy {
       this.openConnection((data) => {
         try {
           const { isOk } = this.ldapContext?.parseSessionSetupRESP(data) || {};
-          debugProxy(`${LLarrow} ${operationType} Receive ${this.coloredAddress}:\t${lBlue}Authenticated = ${isOk}`);
+          debugNtlmLdapProxy(`${LLarrow} ${operationType} Receive ${this.coloredAddress}:\t${lBlue}Authenticated = ${isOk}`);
           resolve(isOk);
         } catch (err: Error | any) {
           reject(err);

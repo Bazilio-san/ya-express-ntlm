@@ -1,7 +1,7 @@
 import { blue, lBlue, reset, rs, yellow } from 'af-color';
 import { Buffer } from 'buffer';
 import { IRsn, TProxy } from '../../interfaces';
-import { debugProxy } from '../debug';
+import { debugNtlmLdapProxy } from '../debug';
 import { NTLMProxyStub } from './NTLMProxyStub';
 import { NTLMProxy } from './NTLMProxy';
 
@@ -54,7 +54,7 @@ const connectToProxy = async (rsn: IRsn, id: string, messageType1: Buffer): Prom
   for (let i = 0; i < controllers.length; i++) {
     const ldapServer = new URL(controllers[i]);
     const decodedPath = decodeURI(ldapServer.pathname || '');
-    debugProxy(`Choose LDAP server ${blue}${ldapServer.host}${reset}${
+    debugNtlmLdapProxy(`Choose LDAP server ${blue}${ldapServer.host}${reset}${
       decodedPath ? ` using base DN "${decodedPath}"` : ''}`);
     proxy = new NTLMProxy({
       id,
@@ -86,14 +86,14 @@ export const proxyCache = {
       const { proxy } = cachedProxy;
       proxy.close();
       delete cache[id];
-      debugProxy(`Deleted proxy from cache${byTimeout ? ' by timeout' : ''
+      debugNtlmLdapProxy(`Deleted proxy from cache${byTimeout ? ' by timeout' : ''
       }: id: ${lBlue}${id}${rs} / ${proxy.coloredAddress}`);
     }
   },
 
   async addOrReplace (rsn: IRsn, id: string, messageType1: Buffer): Promise<string> {
     const { proxy, messageType2Buf, isNewProxy } = await connectToProxy(rsn, id, messageType1);
-    debugProxy(`${isNewProxy ? 'Inserted proxy to' : 'Used proxy from'} cache: id: ${yellow}${id}${rs} / ${proxy.coloredAddress}`);
+    debugNtlmLdapProxy(`${isNewProxy ? 'Inserted proxy to' : 'Used proxy from'} cache: id: ${yellow}${id}${rs} / ${proxy.coloredAddress}`);
     cache[id] = { proxy, expire: Date.now() + PROXY_LIVE_TIME_MILLIS };
     return messageType2Buf.toString('base64');
   },
@@ -105,7 +105,7 @@ export const proxyCache = {
   info (from = '') {
     const { length } = Object.keys(cache);
     if (length) {
-      debugProxy(`[${from}] In cache ${Object.keys(cache).length} LDAP proxy connections`);
+      debugNtlmLdapProxy(`[${from}] In cache ${Object.keys(cache).length} LDAP proxy connections`);
     }
   },
 };

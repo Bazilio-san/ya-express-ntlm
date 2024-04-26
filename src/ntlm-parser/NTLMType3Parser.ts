@@ -4,8 +4,6 @@ import { LMResponseData, NTLMMessageType, NTLMResponseData, NTLMType3, NTLMType3
 import { getFlags, getNtlmEncoding, getNtLmResponseData, getOSVersionStructure, getSecBuf, getSecBufData } from './parser-utils';
 import { ntlmFlags } from './flags';
 
-// const debug = dbg('node-expose-sspi:ntlm-parser');
-
 export class NTLMType3Parser extends AbstractParser {
   constructor (buffer: ArrayBuffer) {
     super(buffer);

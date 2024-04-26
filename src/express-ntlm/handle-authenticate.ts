@@ -3,7 +3,7 @@ import { bg, bold, boldOff, lBlue, reset, yellow } from 'af-color';
 import { EAuthStrategy, IRsn, IUserData } from '../interfaces';
 import { isFlagSet, toBinary, transferExistingProps } from './lib/utils';
 import { proxyCache } from './proxy/proxy-cache';
-import { debug } from './debug';
+import { debugNtlmAuthFlow } from './debug';
 import { userDelayCache } from './user-delay-cache';
 
 const getFragmentOfNtlmMessageType3 = (buf: Buffer, offsetPos: number, lenPos: number, isUtf16le: boolean): string => {
@@ -31,7 +31,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
 
   const udw = getUdwFromMessageType3(messageType3);
   if (!udw.domain) {
-    debug(`${yellow}No domain extracted from NTLM message Type 3 ${reset}(for ${uri})`);
+    debugNtlmAuthFlow(`${yellow}No domain extracted from NTLM message Type 3 ${reset}(for ${uri})`);
   }
 
   // req.ntlm may already have data, but MessageType3 may not have all of it.
@@ -68,7 +68,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
     userDelayCache.set(userData, rsn);
   }
 
-  debug(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username
+  debugNtlmAuthFlow(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username
   } ${userData.isAuthenticated ? bg.lGreen : `${bg.lYellow}NOT `}${
     bold}Authenticated${bg.def + boldOff}${reset} / Requested URI: ${uri}`);
   proxyCache.info('resume');

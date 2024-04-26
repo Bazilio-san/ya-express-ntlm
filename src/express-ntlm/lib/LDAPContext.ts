@@ -4,7 +4,7 @@ import { lBlue, g } from 'af-color';
 import { Buffer } from 'buffer';
 import * as ASN1 from './ASN1';
 import { concatBuffer } from './utils';
-import { debugContext } from '../debug';
+import { debugNtlmContext } from '../debug';
 
 const LDAP_RESULT_CODE = {
   SUCCESS: 0,
@@ -36,12 +36,12 @@ export class LDAPContext {
     const [resultCode, data4] = ASN1.parseENUM2(data3);
 
     if (resultCode === LDAP_RESULT_CODE.SUCCESS) {
-      debugContext(`${pfx}resultCode: SUCCESS`);
+      debugNtlmContext(`${pfx}resultCode: SUCCESS`);
       return { isOk: true };
     }
 
     if (resultCode !== LDAP_RESULT_CODE.SASL_BIND_IN_PROGRESS) {
-      debugContext(`${pfx}resultCode: SASL_BIND_IN_PROGRESS`);
+      debugNtlmContext(`${pfx}resultCode: SASL_BIND_IN_PROGRESS`);
       return { isOk: false };
     }
 
@@ -51,7 +51,7 @@ export class LDAPContext {
 
     const serverSaslCreds: Buffer = ASN1.parseTLV(0x87, data6);
 
-    debugContext(`${pfx}serverSaslCreds: ${serverSaslCreds.toString('utf8')}`);
+    debugNtlmContext(`${pfx}serverSaslCreds: ${serverSaslCreds.toString('utf8')}`);
 
     return { isOk: true, serverSaslCreds };
   }

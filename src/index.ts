@@ -47,3 +47,12 @@ export { NTLMType1Parser } from './ntlm-parser/NTLMType1Parser';
 export { NTLMType2Parser } from './ntlm-parser/NTLMType2Parser';
 export { NTLMType3Parser } from './ntlm-parser/NTLMType3Parser';
 export { AbstractParser } from './ntlm-parser/AbstractParser';
+export {
+  debugNtlmLdapProxy,
+  debugNtlmContext,
+  debugNtlmLdapProxyId,
+  debugNtlmAuthFlow,
+  hvInColor,
+  hnColor,
+  hvOutColor,
+} from './express-ntlm/debug';

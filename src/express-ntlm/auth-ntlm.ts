@@ -4,7 +4,7 @@ import { Buffer } from 'buffer';
 import { IAuthNtlmOptions, IRsn } from '../interfaces';
 import { handleAuthenticate } from './handle-authenticate';
 import { handleNegotiate } from './handle-negotiate';
-import { debug, debugProxyId, hnColor, hvInColor, hvOutColor } from './debug';
+import { debugNtlmAuthFlow, debugNtlmLdapProxyId, hnColor, hvInColor, hvOutColor } from './debug';
 import { NTLMMessageParsed, NTLMMessageType, ntlmParse, NTLMType1, NTLMType2, NTLMType3 } from '../ntlm-parser';
 import { prepareOptions } from '../prepare-options';
 import { arrowR, Larrow } from './lib/constants';
@@ -27,7 +27,7 @@ const getNtlmAuthorizationData = (req: Request): string | undefined => {
  */
 const fillReqNtlm = (req: Request, data: string): NTLMMessageParsed => {
   const parsedData = ntlmParse(data, { compact: true }) as NTLMType1 | NTLMType2 | NTLMType3;
-  debug(`Decoded Authorization header: ${hvInColor}${JSON.stringify(parsedData, undefined, 2)}`);
+  debugNtlmAuthFlow(`Decoded Authorization header: ${hvInColor}${JSON.stringify(parsedData, undefined, 2)}`);
   ['domain', 'username', 'workstation'].forEach((p) => {
     if (parsedData[p]) {
       req.ntlm[p] = parsedData[p];
@@ -55,16 +55,16 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     if (userData.isAuthenticated) {
       if (!authorizationHeader || (authorizationHeader && req.method !== 'POST')) {
         const { username, domain } = transferExistingProps({ ...userData, uri }, req.ntlm);
-        debug(`${requestedURI}\nConnection already authenticated / user: ${username} / domain: ${domain}`);
+        debugNtlmAuthFlow(`${requestedURI}\nConnection already authenticated / user: ${username} / domain: ${domain}`);
         return next();
       }
-      debug(`The connection is authenticated, but the "Authorization" header sent using the POST method was detected`);
+      debugNtlmAuthFlow(`The connection is authenticated, but the "Authorization" header sent using the POST method was detected`);
     }
 
-    debug(uriA);
+    debugNtlmAuthFlow(uriA);
     if (!authorizationHeader) {
-      debug(mTitle);
-      debug(`${Larrow} Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
+      debugNtlmAuthFlow(mTitle);
+      debugNtlmAuthFlow(`${Larrow} Return ${blue}401${reset}: ${hnColor}WWW-Authenticate${blue}: ${hvOutColor}NTLM`);
       return res.setHeader('WWW-Authenticate', 'NTLM').status(401).end();
     }
 
@@ -78,7 +78,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
     const { domain, messageType } = fillReqNtlm(req, ntlmAuthData);
     // Domain names from NTLM messages - we believe
     if (domain) {
-      debugProxyId(`↓ ${domain}`);
+      debugNtlmLdapProxyId(`↓ ${domain}`);
       req.ntlm.domain = domain;
     }
 
@@ -100,12 +100,12 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
       if (!userData.isAuthenticated) {
         return options.handleHttpError403(rsn);
       }
-      if (debug.enabled) {
+      if (debugNtlmAuthFlow.enabled) {
         // eslint-disable-next-line no-console
         console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, userData, `\n`);
       }
       options.handleSuccessAuthorisation(rsn);
-      debug(`${Larrow} handle success authorisation (Default ${bold + reset}next${blue}()${boldOff}${reset})`);
+      debugNtlmAuthFlow(`${Larrow} handle success authorisation (Default ${bold + reset}next${blue}()${boldOff}${reset})`);
       return;
     }
 

@@ -2,7 +2,7 @@
 import { Debug } from 'af-tools-ts';
 import { green, bold, reset, magenta, cyan, yellow, red } from 'af-color';
 
-export const debug = Debug('ntlm:auth-flow', {
+export const debugNtlmAuthFlow = Debug('ntlm:auth-flow', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + green,
@@ -13,21 +13,21 @@ export const hnColor = green;
 export const hvInColor = magenta;
 export const hvOutColor = cyan;
 
-export const debugProxy = Debug('ntlm:ldap-proxy', {
+export const debugNtlmLdapProxy = Debug('ntlm:ldap-proxy', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + yellow,
   messageColor: reset,
 });
 
-export const debugProxyId = Debug('ntlm:ldap-proxy-id', {
+export const debugNtlmLdapProxyId = Debug('ntlm:ldap-proxy-id', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + cyan,
   messageColor: reset,
 });
 
-export const debugContext = Debug('ntlm:context', {
+export const debugNtlmContext = Debug('ntlm:context', {
   noTime: true,
   noPrefix: false,
   prefixColor: bold + red,
