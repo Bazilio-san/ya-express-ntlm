@@ -1,6 +1,6 @@
 {
   "name": "ya-express-ntlm",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "ya-express-ntlm",
   "main": "./dist/cjs/src/index.js",
   "module": "./dist/esm/src/index.js",
@@ -67,6 +67,8 @@
     "express",
     "ntlm",
     "ldap",
-    "authentication"
+    "authentication",
+    "silent authentication",
+    "sso"
   ]
 }
