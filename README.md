@@ -182,6 +182,31 @@ startCoder();
 <img src="img/decode-ntlm-message.png" alt="Decode NTLM message" />
 
 
+## Silent authentication within the corporate network
+
+Let's say you host the site `my-intranet-site.corp.com` for your corporate
+network and configure NTLM authentication on it using `ya-express-ntml`.  
+
+Your users log in to their Windows computers in the `MYDOMAIN` domain.
+
+If you do not take additional measures, then the first time after launching the browser,
+when going to the site, the `WWW-Authenticate: NTLM` header will be sent in response to the HTTP request
+and the browser will display a pop-up dialog for entering your login and password:
+
+![Authentication_pop_up.png](img%2FAuthentication_pop_up.png)
+
+But Windows already has information about what login the user is logged in under.
+And you can ensure that such login popup will not be displayed. The login under 
+which the user logged into Windows will be automatically used.
+
+To do this, you need to ask your domain administrator to add the site `https://my-intranet-site.corp.com`
+to `Intranet zone`. 
+
+![NO-authentication_pop_up.png](img%2FNO-authentication_pop_up.png)
+
+As a result of `ya-express-ntml` operation, `res.ntlm` will contain the name of the authenticated user,
+and then it can be used in the authorization logic on your site.
+
 
 ## References
 
