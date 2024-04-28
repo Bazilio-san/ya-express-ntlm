@@ -50,7 +50,6 @@ const app = express();
 const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
-  getStrategy: () => 'NTLM',
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
   getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://dc.mydomain.myorg.com'],
 }));
@@ -83,7 +82,6 @@ const app: express.Express = express();
 const port = Number(process.env.TEST_PORT) || 8080;
 
 app.use(authNTLM({
-  getStrategy: () => EAuthStrategy.NTLM,
   getDomain: () => process.env.DOMAIN || 'MYDOMAIN',
   getDomainControllers: () => [process.env.LDAP_ADDRESS || 'ldap://dc.mydomain.myorg.com'],
 }));
@@ -134,10 +132,10 @@ app.use(authNTLM({
 
 ## Options
 
-All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L40)     
+All parameters are optional functions [listed here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/interfaces.ts#L42)     
 
 
-Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L7).
+Default values are [here](https://github.com/Bazilio-san/ya-express-ntlm/blob/master/src/prepare-options.ts#L9).
 
 
 
