@@ -10,6 +10,8 @@ export {
   EAuthStrategy,
 } from './interfaces';
 
+export { ProxyCache } from './express-ntlm/proxy/ProxyCache';
+
 export {
   createLMHashedPasswordV1,
   createNTHashedPasswordV1,

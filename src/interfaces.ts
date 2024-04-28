@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { ConnectionOptions } from 'node:tls';
 import { NTLMProxy } from './express-ntlm/proxy/NTLMProxy';
 import { NTLMProxyStub } from './express-ntlm/proxy/NTLMProxyStub';
+import { ProxyCache } from './express-ntlm/proxy/ProxyCache';
+import { NTLMType2 } from './ntlm-parser';
 
 export interface IUserData {
   username: string,
@@ -42,6 +44,12 @@ export interface IAuthNtlmOptionsMandatory {
    * Function to generate custom proxy cache ID.
    */
   getProxyId: (rsn: IRsn) => string,
+
+  /**
+   * By default, this function fills req.ntlm.domain with messageType2
+   * and replaces proxyId with the new domain name // VVQ
+   */
+  onMessageType2: (rsn: IRsn, messageType2: NTLMType2, proxyCache: ProxyCache, proxyId: string) => void,
 
   /**
    * Function to return the cached NTLM user data.

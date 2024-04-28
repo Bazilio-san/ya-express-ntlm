@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 import { bg, bold, boldOff, lBlue, reset, yellow } from 'af-color';
 import { EAuthStrategy, IRsn, IUserData } from '../interfaces';
 import { isFlagSet, toBinary, transferExistingProps } from './lib/utils';
-import { proxyCache } from './proxy/proxy-cache';
+import { proxyCache } from './proxy/ProxyCache';
 import { debugNtlmAuthFlow } from './debug';
 import { userDelayCache } from './user-delay-cache';
 

@@ -3,6 +3,8 @@ import { red } from 'af-color';
 import { EAuthStrategy, IAuthNtlmOptions, IAuthNtlmOptionsMandatory, IRsn, IUserData } from './interfaces';
 import { debugNtlmAuthFlow, debugNtlmLdapProxyId } from './express-ntlm/debug';
 import { DELAY_BETWEEN_USER_AUTHENTICATE_CHALLENGES_MILLIS } from './express-ntlm/lib/constants';
+import { NTLMType2 } from './ntlm-parser';
+import { ProxyCache } from './express-ntlm/proxy/ProxyCache';
 
 export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMandatory => {
   const opt = (options || {}) as IAuthNtlmOptionsMandatory;
@@ -14,6 +16,15 @@ export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMand
       const proxyId = rsn.req.ntlm.domain || rsn.options.getDomain(rsn) || 'foo';
       debugNtlmLdapProxyId(`↑ ${proxyId}`);
       return proxyId;
+    };
+  }
+
+  if (typeof opt.onMessageType2 !== 'function') {
+    opt.onMessageType2 = (rsn: IRsn, messageType2Parsed: NTLMType2, _proxyCache: ProxyCache, _proxyId: string) => {
+      if (messageType2Parsed.domain) {
+        debugNtlmLdapProxyId(`↓ ${messageType2Parsed.domain}`);
+        rsn.req.ntlm.domain = messageType2Parsed.domain;
+      }
     };
   }
 
