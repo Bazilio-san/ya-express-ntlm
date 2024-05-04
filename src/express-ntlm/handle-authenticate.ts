@@ -4,7 +4,8 @@ import { EAuthStrategy, IRsn, IUserData } from '../interfaces';
 import { isFlagSet, toBinary, transferExistingProps } from './lib/utils';
 import { proxyCache } from './proxy/ProxyCache';
 import { debugNtlmAuthFlow } from './debug';
-import { userDelayCache } from './user-delay-cache';
+import { userAuthDelayCache } from './user-auth-delay-cache';
+import { NTLMProxy } from './proxy/NTLMProxy';
 
 const getFragmentOfNtlmMessageType3 = (buf: Buffer, offsetPos: number, lenPos: number, isUtf16le: boolean): string => {
   const offset = buf.readUInt32LE(offsetPos);
@@ -39,7 +40,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   options.addCachedUserData(rsn, req.ntlm as IUserData);
   const userData = req.ntlm;
   const { domain } = userData;
-  const toNextAttemptSec = userDelayCache.get(userData);
+  const toNextAttemptSec = userAuthDelayCache.get(userData);
   if (toNextAttemptSec) {
     options.handleHttpError400(res, `${toNextAttemptSec} seconds left until next login attempt`);
     return IS_ERROR;
@@ -51,7 +52,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
     userData.isAuthenticated = true;
   } else {
     const proxyId = options.getProxyId({ ...rsn, payload: null });
-    const proxy = proxyCache.getProxy(proxyId);
+    const proxy = proxyCache.getProxy(proxyId) as NTLMProxy;
     if (!proxy) {
       options.handleHttpError500(res, `No LDAP proxy found in cache by id '${proxyId}' / domain '${domain}' (for ${uri})`);
       return IS_ERROR;
@@ -65,7 +66,7 @@ export const handleAuthenticate = async (rsn: IRsn, messageType3: Buffer): Promi
   }
 
   if (!userData.isAuthenticated) {
-    userDelayCache.set(userData, rsn);
+    userAuthDelayCache.set(userData, rsn);
   }
 
   debugNtlmAuthFlow(`User ${bold}${lBlue}${domain ? `${domain}/` : ''}${userData.username

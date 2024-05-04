@@ -74,7 +74,7 @@ export class NTLMProxy {
     this.socket.write(msgBuf);
   }
 
-  async negotiate (ntlmNegotiate: Buffer): Promise<Buffer | undefined> {
+  async negotiate (messageType1: Buffer): Promise<Buffer | undefined> {
     const operationType = `${lBlue}[negotiate]${reset}`;
     return new Promise<Buffer | undefined>((resolve, reject) => {
       this.openConnection((data) => {
@@ -89,12 +89,12 @@ export class NTLMProxy {
 
       this.ldapContext = new LDAPContext();
 
-      const msg = this.ldapContext.makeSessionSetupREQ(ntlmNegotiate);
+      const msg = this.ldapContext.makeSessionSetupREQ(messageType1, 1);
       this.socketWrite(msg, operationType);
     });
   }
 
-  async authenticate (ntlmAuthenticate: Buffer): Promise<boolean> {
+  async authenticate (messageType3: Buffer): Promise<boolean> {
     const operationType = `${lBlue}[authenticate]${reset}`;
     return new Promise<boolean>((resolve, reject) => {
       this.openConnection((data) => {
@@ -106,7 +106,7 @@ export class NTLMProxy {
           reject(err);
         }
       }, reject);
-      const msg = this.ldapContext?.makeSessionSetupREQ(ntlmAuthenticate);
+      const msg = this.ldapContext?.makeSessionSetupREQ(messageType3, 2);
       this.socketWrite(msg, operationType);
     });
   }

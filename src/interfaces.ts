@@ -46,8 +46,7 @@ export interface IAuthNtlmOptionsMandatory {
   getProxyId: (rsn: IRsn) => string,
 
   /**
-   * By default, this function fills req.ntlm.domain with messageType2
-   * and replaces proxyId with the new domain name // VVQ
+   * By default, this function fills req.ntlm.domain with domain name from messageType2
    */
   onMessageType2: (rsn: IRsn, messageType2: NTLMType2, proxyCache: ProxyCache, proxyId: string) => void,
 
