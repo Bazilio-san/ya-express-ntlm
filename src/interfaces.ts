@@ -101,7 +101,7 @@ export interface IAuthNtlmOptionsMandatory {
   /**
    * Function to handle Success Authorisation.
    */
-  handleSuccessAuthorisation: (rsn: IRsn) => void,
+  handleSuccessAuthentication: (rsn: IRsn) => void,
 
   /**
    * Returns an options object that will be passed to tls.connect and

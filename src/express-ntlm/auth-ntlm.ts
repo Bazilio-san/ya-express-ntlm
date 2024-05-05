@@ -109,7 +109,7 @@ export const authNTLM = (authNtlmOptions?: IAuthNtlmOptions): RequestHandler => 
         // eslint-disable-next-line no-console
         console.log(`\n${bg.lGreen + black}req.ntlm:${bg.def + rs}`, userData, `\n`);
       }
-      options.handleSuccessAuthorisation(rsn);
+      options.handleSuccessAuthentication(rsn);
       debugNtlmAuthFlow(`${Larrow} handle success authorisation (Default ${bold + reset}next${blue}()${boldOff}${reset})`);
       return;
     }

@@ -84,8 +84,8 @@ export const prepareOptions = (options?: IAuthNtlmOptions): IAuthNtlmOptionsMand
     };
   }
 
-  if (typeof opt.handleSuccessAuthorisation !== 'function') {
-    opt.handleSuccessAuthorisation = (rsn: IRsn) => {
+  if (typeof opt.handleSuccessAuthentication !== 'function') {
+    opt.handleSuccessAuthentication = (rsn: IRsn) => {
       rsn.next();
     };
   }
