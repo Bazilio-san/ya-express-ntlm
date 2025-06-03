@@ -8,8 +8,10 @@ export interface Type1MessageOptions {
 }
 
 export const getSuppliedDomainData = (messageType1: Buffer): string => {
-  const buf = messageType1.buffer.slice(messageType1.byteOffset, messageType1.byteOffset + messageType1.byteLength);
+  const buf: ArrayBuffer = messageType1.buffer.slice(messageType1.byteOffset, messageType1.byteOffset + messageType1.byteLength);
+  // @ts-ignore
   const suppliedDomain = getSecBuf(buf, 16);
+  // @ts-ignore
   return getSecBufData(buf, suppliedDomain, 'ascii');
 };
 
